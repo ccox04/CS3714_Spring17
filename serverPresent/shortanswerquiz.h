@@ -2,6 +2,8 @@
 #define SHORTANSWERQUIZ_H
 
 #include <QDialog>
+#include <QMessageBox>
+#include "presentcontainer.h"
 
 namespace Ui {
 class ShortAnswerQuiz;
@@ -15,8 +17,15 @@ public:
     explicit ShortAnswerQuiz(QWidget *parent = 0);
     ~ShortAnswerQuiz();
 
+private slots:
+    void on_okPushButton_clicked();
+
+signals:
+    void startServerSignalSA(int correctAnswer, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
+
 private:
     Ui::ShortAnswerQuiz *ui;
+    PresentContainer *presentContainer;
 };
 
 #endif // SHORTANSWERQUIZ_H

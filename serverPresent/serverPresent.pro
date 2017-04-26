@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,12 +28,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     multiplechoicequiz.cpp \
     presentserver.cpp \
-    shortanswerquiz.cpp
+    shortanswerquiz.cpp \
+    presentthread.cpp \
+    presentcontainer.cpp
 
 HEADERS  += mainwindow.h \
     multiplechoicequiz.h \
     presentserver.h \
-    shortanswerquiz.h
+    shortanswerquiz.h \
+    presentthread.h \
+    presentcontainer.h
 
 FORMS    += mainwindow.ui \
     multiplechoicequiz.ui \
