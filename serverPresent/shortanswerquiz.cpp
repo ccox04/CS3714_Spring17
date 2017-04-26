@@ -8,6 +8,8 @@ ShortAnswerQuiz::ShortAnswerQuiz(QWidget *parent) :
     ui->setupUi(this);
     presentContainer = new PresentContainer();
     connect(this, SIGNAL(startServerSignalSA(int, QString, QString, QString, QString, QString, QString, QString)), presentContainer, SLOT(startServerSlotPC(int ,QString, QString, QString, QString, QString, QString, QString)));
+    connect(presentContainer, SIGNAL(updateQuizRecvCounterSignal(int)), this, SLOT(updateQuizRecvCounterSlot(int)));
+    connect(presentContainer, SIGNAL(updateQuizSentCounterSignal(int)), this, SLOT(updateQuizSentCounterSlot(int)));
 }
 
 ShortAnswerQuiz::~ShortAnswerQuiz()
@@ -24,9 +26,13 @@ void ShortAnswerQuiz::on_okPushButton_clicked()
     QString question = ui->shortAnswerQuestionLineEdit->text();
     QString answer = ui->shortAnswerAnwserLineEdit->text();
     emit startServerSignalSA(0, question, "NA", "NA", "NA", "NA", "NA", answer);
-    // I need to store the question and answer values and pass them over the socket.
+}
 
-//    AdministerResult administerResult;
-//    administerResult.setModal(true);
-//    administerResult.exec();
+// This is to update the received quiz counter on the professors GUI
+void ShortAnswerQuiz::updateQuizRecvCounterSlot(int count_in){
+    ui->quizReceivedLcdNumber->display(QString::number(count_in));
+}
+
+void ShortAnswerQuiz::updateQuizSentCounterSlot(int count_in){
+    ui->quizSentLcdNumber->display(QString::number(count_in));
 }

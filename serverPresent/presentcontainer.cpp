@@ -7,6 +7,8 @@ PresentContainer::PresentContainer(QObject *parent) :
     // Init variables
     presentServer = new PresentServer();
     connect(this, SIGNAL(setQuizSignal(int,QString,QString,QString,QString,QString,QString,QString)), presentServer, SLOT(setQuizSlot(int,QString,QString,QString,QString,QString,QString,QString)));
+    connect(presentServer, SIGNAL(updateQuizRecvCounterSignal(int)), this, SLOT(updateQuizRecvCounterSlot(int)));
+    connect(presentServer, SIGNAL(updateQuizSentCounterSignal(int)), this, SLOT(updateQuizSentCounterSlot(int)));
 }
 
 PresentContainer::~PresentContainer(){
@@ -48,3 +50,14 @@ void PresentContainer::startServerSlotPC(int correctAnswer, QString question, QS
     Msgbox.setText(tr("The server is running on\n\nIP: %1\nport: %2\n\n") .arg(ipAddress).arg(presentServer->serverPort()));
     Msgbox.exec();
 }
+
+// This is to update the received quiz counter on the professors GUI
+void PresentContainer::updateQuizRecvCounterSlot(int count_in){
+    emit updateQuizRecvCounterSignal(count_in);
+}
+
+// This is to update the sent quiz counter on the professors GUI
+void PresentContainer::updateQuizSentCounterSlot(int count_in){
+    emit updateQuizSentCounterSignal(count_in);
+}
+

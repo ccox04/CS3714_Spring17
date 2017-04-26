@@ -20,6 +20,9 @@ public:
 private slots:
     void on_okPushButton_clicked();
 
+public slots:
+    void updateQuizRecvCounterSlot(int count_in);
+    void updateQuizSentCounterSlot(int count_in);
 signals:
     void startServerSignalMC(int correctAnswer, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
 

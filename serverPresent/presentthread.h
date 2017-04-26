@@ -3,6 +3,9 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include <QtNetwork>
+#include <QDate>
+#include <QFile>
 
 class PresentThread : public QThread
 {
@@ -15,9 +18,13 @@ public:
 
 signals:
     void error(QTcpSocket::SocketError socketError);
+    void updateQuizRecvCounterSignal(int count_out);
+    void updateQuizSentCounterSignal(int count_out);
 
 private:
     int socketDescriptor;
+    int quizCounterRecv;
+    int quizCounterSent;
     QString text;
 };
 

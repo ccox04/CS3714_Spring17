@@ -13,6 +13,8 @@ PresentServer::PresentServer(QObject *parent)
     answerE = "NA";
     answerSA = "NA";
     correctAnswer = 0;
+    quizCounterRecv = 0;
+    quizCounterSent = 0;
     qDebug() << "INSIDE OF PRESENT SERVER CONSTRUCTOR" + QString(correctAnswer) + question + answerA + answerB + answerC + answerD + answerE + answerSA;
 //    fortunes << tr("You've been leading a dog's life. Stay off the furniture.")
 //             << tr("You've got to think about tomorrow.")
@@ -43,5 +45,20 @@ void PresentServer::incomingConnection(qintptr socketDescriptor)
 //    PresentThread *thread = new PresentThread(socketDescriptor, fortune, this);
     PresentThread *thread = new PresentThread(socketDescriptor, combined, this);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    connect(thread,SIGNAL(updateQuizRecvCounterSignal(int)), this, SLOT(updateQuizRecvCounterSlot(int)));
+    connect(thread, SIGNAL(updateQuizSentCounterSignal(int)), this, SLOT(updateQuizSentCounterSlot(int)));
     thread->start();
 }
+
+// This is to update the received quiz counter on the professors GUI
+void PresentServer::updateQuizRecvCounterSlot(int count_in){
+    quizCounterRecv = quizCounterRecv + count_in;
+    emit updateQuizRecvCounterSignal(quizCounterRecv);
+}
+
+// This is to update the sent quiz counter on the professors GUI
+void PresentServer::updateQuizSentCounterSlot(int count_in){
+    quizCounterSent = quizCounterSent + count_in;
+    emit updateQuizSentCounterSignal(quizCounterSent);
+}
+
