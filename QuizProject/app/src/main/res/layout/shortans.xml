@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/background">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/quest"
+        android:layout_weight="4"
+        android:textColor="@android:color/white"
+        android:background="@color/background"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/confirm"
+        android:hint="Answer Question Here"
+        android:textColor="@android:color/white"
+        android:layout_weight="5"
+        android:id="@+id/string"
+        android:textAlignment="center"
+        android:background="@color/colorAccent"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirm"
+        android:layout_alignParentBottom="true"
+        android:text="Submit answer"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
