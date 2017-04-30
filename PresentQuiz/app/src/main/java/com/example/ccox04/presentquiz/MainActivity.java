@@ -29,17 +29,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnFocusChangeListener {
     private static final String TAG = MainActivity.class.getSimpleName(); // For Debugging
 
     Socket socket;
     ClientInAsyncTask clientInAsyncTask;
     ClientOutAsyncTask clientOutAsyncTask;
-    Button connectBtn;
-    EditText portEditText, ipEditText;
+    EditText userIDEditText;
+    Button scanImageBtn;
     String ipAddressString;
     int portInt;
-    TextView quizTextView;
     QuizInfo quizInfo;
     JSONObject jsonReader;
     Intent getMultipleChoiceActivityIntent;
@@ -47,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     final int intentResult = 1;
 
     public static final String ENDMESSAGECHAR = "###";
+
+    public static final String USERIDSTRING = "userIDString";
 
     public static final String QUESTION_MC = "question_mc";
     public static final String ANSWERA = "answerA";
@@ -85,15 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
     int number_questions, questionCounter;
 
-    String ms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        connectBtn = (Button) findViewById(R.id.connectButton);
-        portEditText = (EditText) findViewById(R.id.portEditText);
-        ipEditText = (EditText) findViewById(R.id.ipEditText);
-        quizTextView = (TextView) findViewById(R.id.quizInfoTextView);
+        userIDEditText = (EditText) findViewById(R.id.userIDEditTextMain);
+        scanImageBtn = (Button) findViewById(R.id.scanImageButtonMain);
+        userIDEditText.setOnFocusChangeListener(this);
+        scanImageBtn.setClickable(false);
         number_questions = 1;
         questionCounter = 0;
 
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         quizInfo.setUserAnswers_list(savedInstanceState.getStringArrayList(USERANSWERS_LIST));
         quizInfo.setQuestion_type_list(savedInstanceState.getIntegerArrayList(QUESTIONTYPE_LIST));
         quizInfo.setServerIP(savedInstanceState.getString(SERVERIP));
+        quizInfo.setUserID(savedInstanceState.getString(USERIDSTRING));
         ipAddressString = savedInstanceState.getString(SERVERIP);
         quizInfo.setServerPort(savedInstanceState.getInt(SERVERPORT));
         portInt = savedInstanceState.getInt(SERVERPORT);
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(SERVERPORT, portInt);
         outState.putInt(NUMBERQUESTIONS, number_questions);
         outState.putInt(CURRENTQUESTIONCOUNTER, questionCounter);
+        outState.putString(USERIDSTRING, quizInfo.getUserID());
         super.onSaveInstanceState(outState);
     }
 
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(questionCounter == number_questions){
             Log.d(TAG,"MainActivity onActivityResult questionCounter == number_questions");
-            connectBtn.setEnabled(false);
+            scanImageBtn.setEnabled(false);
 
             if(clientInAsyncTask != null && clientInAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
                 clientInAsyncTask.cancel(true);
@@ -259,8 +261,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickConnect(View view){
-        ipAddressString = ipEditText.getText().toString();
-        portInt = Integer.parseInt(portEditText.getText().toString());
+        ipAddressString = ipEditText.getText().toString(); // Set this to correct IP Address from QR code
+        portInt = Integer.parseInt(portEditText.getText().toString());  // Set this to correct IP PORT from QR code
         if (clientInAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
             //Log.d(TAG,"MainActivity : in If case 0");
             clientInAsyncTask = new ClientInAsyncTask();
@@ -278,6 +280,13 @@ public class MainActivity extends AppCompatActivity {
 //        quizTextView.setText(ms);
     }
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(Objects.equals(v.getId(), userIDEditText.getId())){
+            scanImageBtn.setClickable(true);
+        }
+    }
+
     private class ClientOutAsyncTask extends AsyncTask<Integer, Integer, Void>{
 
         @Override
@@ -293,9 +302,11 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Integer... params) {
             Log.d(TAG,"PlayingActivity : Entered doInBackground");
             try{
-//                socket = new Socket(ipAddressString, Integer.parseInt(portString));
-                socket = new Socket("192.168.0.7", portInt);
-                String sendQuizAnswerString = "";
+                Log.d(TAG, "IP = " + ipAddressString);
+                Log.d(TAG, "PORT = " + portInt);
+                socket = new Socket(ipAddressString, portInt);
+//                socket = new Socket("192.168.0.7", portInt);
+                String sendQuizAnswerString = quizInfo.getUserID() + "|||";
                 DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
                 Log.d(TAG,"doInBackground number of questions = " + number_questions);
                 for(int i = 0; i < number_questions; i++) {
@@ -303,23 +314,23 @@ public class MainActivity extends AppCompatActivity {
                     if (Objects.equals(0, quizInfo.getQuestion_type_list().get(i))) { // 0 = Multiple Choice
                         Log.d(TAG,"doInBackground has quiz_mc !");
                         // Setting question and answers for Multiple choice
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerA_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerB_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerC_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerD_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerE_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getCorrectAnswer_mc_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getUserAnswers_list().get(i);
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerA_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerB_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerC_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerD_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerE_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getCorrectAnswer_mc_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getUserAnswers_list().get(i) + "|||";
                         DOS.writeUTF(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file.
                     }
 
                     // Checking if its a short answer quiz
                     else if (Objects.equals(1, quizInfo.getQuestion_type_list().get(i))) { // 1 = Short Answer
                         // Setting question and answers for Short answer quiz
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerSA_list().get(i);
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getUserAnswers_list().get(i);
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerSA_list().get(i) + "|||";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getUserAnswers_list().get(i) + "|||";
                         DOS.writeUTF(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file.
                     }
                 }
@@ -369,8 +380,10 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Integer... params) {
             Log.d(TAG,"PlayingActivity : Entered doInBackground");
             try{
-//                socket = new Socket(ipAddressString, Integer.parseInt(portString));
-                socket = new Socket("192.168.0.7", portInt);
+                Log.d(TAG, "IP = " + ipAddressString);
+                Log.d(TAG, "PORT = " + portInt);
+                socket = new Socket(ipAddressString, portInt);
+//                socket = new Socket("192.168.0.7", portInt);
                 quizInfo.setServerIP(ipAddressString); // Saving the serverip and port to send data out later
                 quizInfo.setServerPort(portInt);
                 InputStream inputStream = socket.getInputStream();

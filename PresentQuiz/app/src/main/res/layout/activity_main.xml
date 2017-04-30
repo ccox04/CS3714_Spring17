@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,32 +14,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/portEditText"
-            android:hint="Port Number" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/ipEditText"
-            android:hint="IP Address" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:id="@+id/connectButton"
-            android:text="Connect"
-            android:onClick="onClickConnect"/>
+            android:layout_height="wrap_content"
+            android:hint="Enter Class Identifier"
+            android:layout_weight="2"
+            android:id="@+id/userIDEditTextMain"
+            android:background="@color/colorAccent"
+            tools:textColorHint="@color/hint"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:textAlignment="center" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/quizInfoTextView"
-            android:text="Waiting on your quiz!"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="6.5"
+            android:clickable="false"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:background="@color/colorAccent"
+            android:id="@+id/scanImageButtonMain"
+            android:textColor="@android:color/white"
+            android:text="Scan Image"/>
 
     </LinearLayout>
+
 </RelativeLayout>

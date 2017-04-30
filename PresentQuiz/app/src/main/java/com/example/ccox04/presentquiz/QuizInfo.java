@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 public class QuizInfo {
-    String serverIP, question_mc, question_sa, answerA, answerB, answerC, answerD, answerE, answerSA, userAnswerMC, userAnswerSA;
+    String serverIP, userID, question_mc, question_sa, answerA, answerB, answerC, answerD, answerE, answerSA, userAnswerMC, userAnswerSA;
     ArrayList<Integer> question_type_list = new ArrayList<>();  // 0 = Multiple Choice;  1 = Short Answer
     ArrayList<String> questions_list = new ArrayList<>();
     ArrayList<String> answerA_list = new ArrayList<>();
@@ -238,5 +238,13 @@ public class QuizInfo {
     public void setUserAnswerMC(String userAnswerMC) {
         userAnswers_list.add(userAnswerMC);
         this.userAnswerMC = userAnswerMC;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

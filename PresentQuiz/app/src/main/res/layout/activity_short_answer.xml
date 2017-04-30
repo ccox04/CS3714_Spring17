@@ -8,36 +8,49 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/background"
     tools:context="com.example.ccox04.presentquiz.ShortAnswerActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:text="Question: Your quesiton goes here"
             android:id="@+id/question_saTextView"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:textSize="25dp"
+            android:textColor="@android:color/white"
             android:textAlignment="center" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:textAlignment="center"
             android:id="@+id/answer_saEditText"
+            android:background="@color/colorAccent"
             android:hint="Type your answer here."/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="false"/>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/submit_saButton"
             android:text="Submit"
-            android:onClick="onClickSubmit"/>
+            android:onClick="onClickSubmit"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 

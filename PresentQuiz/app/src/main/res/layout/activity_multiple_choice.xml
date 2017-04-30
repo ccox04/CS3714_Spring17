@@ -8,56 +8,98 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/background"
     tools:context="com.example.ccox04.presentquiz.MultipleChoiceActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="13">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:text="Question: Your quesiton goes here"
+            android:textSize="20dp"
             android:id="@+id/question_mcTextView"
-            android:layout_weight="1"
-            android:textAlignment="center" />
+            android:layout_weight="7"
+            android:textAlignment="center"
+            android:background="@color/background"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:id="@+id/answerAButtonMC"
             android:layout_weight="1"
             android:text="answerA"
-            android:onClick="onClickAnswerA"/>
+            android:onClick="onClickAnswerA"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:clickable="false"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:id="@+id/answerBButtonMC"
             android:layout_weight="1"
             android:text="answerB"
-            android:onClick="onClickAnswerB"/>
+            android:onClick="onClickAnswerB"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:clickable="false"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:id="@+id/answerCButtonMC"
             android:layout_weight="1"
             android:text="answerC"
-            android:onClick="onClickAnswerC"/>
+            android:onClick="onClickAnswerC"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:clickable="false"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:id="@+id/answerDButtonMC"
             android:layout_weight="1"
             android:text="answerD"
-            android:onClick="onClickAnswerD"/>
+            android:onClick="onClickAnswerD"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:clickable="false"/>
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:id="@+id/answerEButtonMC"
             android:layout_weight="1"
             android:text="answerE"
-            android:onClick="onClickAnswerE"/>
+            android:onClick="onClickAnswerE"
+            android:textColor="@android:color/white"
+            android:background="@color/colorAccent"/>
 
     </LinearLayout>
 
