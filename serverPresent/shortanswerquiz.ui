@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>705</width>
-    <height>328</height>
+    <height>308</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,7 +89,7 @@
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>280</y>
+     <y>250</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -108,46 +108,6 @@
        <string>Return</string>
       </property>
      </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>240</y>
-     <width>261</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_5">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
-      <item>
-       <widget class="QLabel" name="quizSentLabel">
-        <property name="text">
-         <string>Quiz(s) Sent:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLCDNumber" name="quizSentLcdNumber"/>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
-      <item>
-       <widget class="QLabel" name="quizReceivedLabel">
-        <property name="text">
-         <string>Quiz(s) Received:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLCDNumber" name="quizReceivedLcdNumber"/>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>

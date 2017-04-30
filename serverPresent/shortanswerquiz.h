@@ -3,7 +3,8 @@
 
 #include <QDialog>
 #include <QMessageBox>
-#include "presentcontainer.h"
+//#include "presentcontainer.h"
+//#include "mainwindow.h"
 
 namespace Ui {
 class ShortAnswerQuiz;
@@ -20,17 +21,14 @@ public:
 private slots:
     void on_okPushButton_clicked();
 
-
-public slots:
-    void updateQuizRecvCounterSlot(int count_in);
-    void updateQuizSentCounterSlot(int count_in);
-
 signals:
-    void startServerSignalSA(int correctAnswer, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
+    void addQuestionSignalSA(int correctAnswer, int type, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
 
 private:
     Ui::ShortAnswerQuiz *ui;
-    PresentContainer *presentContainer;
+//    MainWindow *mainWindow;
+//    PresentContainer *presentContainer;
+    int QUESTIONTYPE_SA = 1;
 };
 
 #endif // SHORTANSWERQUIZ_H

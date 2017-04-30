@@ -8,10 +8,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    presentContainer = new PresentContainer();
+    multipleChoiceUI = new MultipleChoiceQuiz();
+    shortAnswerUI = new ShortAnswerQuiz();
+
+    connect(multipleChoiceUI, SIGNAL(addQuestionSignalMC(int, int, QString, QString, QString, QString, QString, QString, QString)), this, SLOT(addQuestionSlotMW(int, int, QString, QString, QString, QString, QString, QString, QString)));
+    connect(shortAnswerUI, SIGNAL(addQuestionSignalSA(int,int,QString,QString,QString,QString,QString,QString,QString)), this, SLOT(addQuestionSlotMW(int, int, QString, QString, QString, QString, QString, QString, QString)));
+    connect(this, SIGNAL(startServerSignal()), presentContainer, SLOT(startServerSlotPC()));
+    connect(this, SIGNAL(addQuestionSignal(int,int,QString,QString,QString,QString,QString,QString,QString)), presentContainer, SLOT(addQuestionSlotPC(int,int,QString,QString,QString,QString,QString,QString,QString)));
+    connect(presentContainer, SIGNAL(updateQuizRecvCounterSignal(int)), this, SLOT(updateQuizRecvCounterSlot(int)));
+    connect(presentContainer, SIGNAL(updateQuizSentCounterSignal(int)), this, SLOT(updateQuizSentCounterSlot(int)));
 }
 
 MainWindow::~MainWindow()
 {
+    delete multipleChoiceUI;
+    delete shortAnswerUI;
     delete ui;
 }
 
@@ -19,16 +31,27 @@ void MainWindow::on_okPushButton_clicked()
 {
     // if radio button pressed etc
     if(ui->multipleChoiceRadioButton->isChecked()){
-        MultipleChoiceQuiz multipleChoiceQuiz;
-        multipleChoiceQuiz.setModal(true);
-        multipleChoiceQuiz.exec();
+        multipleChoiceUI->show();
     }
     else if(ui->shortAnswerRadioButton->isChecked()){
-            ShortAnswerQuiz shortAnswerQuiz;
-            shortAnswerQuiz.setModal(true);
-            shortAnswerQuiz.exec();
+        shortAnswerUI->show();
     }
-    else{
-        // Print the user did not select a quiz type
-    }
+}
+
+void MainWindow::on_startServerPushButton_clicked()
+{
+    emit startServerSignal();
+}
+void MainWindow::addQuestionSlotMW(int correctAnswer, int type, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA){
+    emit addQuestionSignal(correctAnswer, type, question, answerA, answerB, answerC, answerD, answerE, answerSA);
+}
+
+// This is to update the received quiz counter on the professors GUI
+void MainWindow::updateQuizRecvCounterSlot(int count_in){
+    ui->quizReceivedLcdNumber->display(QString::number(count_in));
+}
+
+// This is to update the sent quiz counter on the professors GUI
+void MainWindow::updateQuizSentCounterSlot(int count_in){
+    ui->quizSentLcdNumber->display(QString::number(count_in));
 }

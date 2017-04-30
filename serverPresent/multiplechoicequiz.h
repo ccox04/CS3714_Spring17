@@ -3,7 +3,8 @@
 
 #include <QDialog>
 #include <QMessageBox>
-#include "presentcontainer.h"
+//#include "presentcontainer.h"
+//#include "mainwindow.h"
 
 namespace Ui {
 class MultipleChoiceQuiz;
@@ -20,15 +21,14 @@ public:
 private slots:
     void on_okPushButton_clicked();
 
-public slots:
-    void updateQuizRecvCounterSlot(int count_in);
-    void updateQuizSentCounterSlot(int count_in);
 signals:
-    void startServerSignalMC(int correctAnswer, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
+    void addQuestionSignalMC(int correctAnswer, int type_out, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
 
 private:
     Ui::MultipleChoiceQuiz *ui;
-    PresentContainer *presentContainer;
+//    MainWindow *mainWindow;
+//    PresentContainer *presentContainer;
+    int QUESTIONTYPE_MC = 0;
 };
 
 #endif // MULTIPLECHOICEQUIZ_H

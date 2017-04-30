@@ -12,7 +12,8 @@ class PresentThread : public QThread
     Q_OBJECT
 
 public:
-    PresentThread(int socketDescriptor, const QString &fortune, QObject *parent); // change forutune to QString question/answer
+    PresentThread(int socketDescriptor, const QString &quiz, QObject *parent); // change forutune to QString question/answer
+    void sendQuizSlot();
 
     void run() override;
 
@@ -21,10 +22,14 @@ signals:
     void updateQuizRecvCounterSignal(int count_out);
     void updateQuizSentCounterSignal(int count_out);
 
+public slots:
+    void readyRead();
+    void disconnected();
+//    void sendQuizSlot();
+
 private:
+    QTcpSocket *socket;
     int socketDescriptor;
-    int quizCounterRecv;
-    int quizCounterSent;
     QString text;
 };
 

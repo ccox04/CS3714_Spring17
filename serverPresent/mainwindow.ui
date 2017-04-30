@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>549</width>
-    <height>206</height>
+    <width>724</width>
+    <height>229</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>501</width>
+      <width>691</width>
       <height>61</height>
      </rect>
     </property>
@@ -27,7 +27,10 @@
      <item>
       <widget class="QLabel" name="instructionsLabel">
        <property name="text">
-        <string>Instructions: Please select the type of quiz to administer. Then click ok. To stop click cancel.</string>
+        <string>Instructions: Please select the type of question to add. Then click ok. To start quiz click Start Quiz To stop click cancel.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -58,16 +61,63 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="layoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>20</x>
       <y>90</y>
-      <width>201</width>
-      <height>31</height>
+      <width>261</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="quizSentLabel">
+         <property name="text">
+          <string>Quiz(s) Sent:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="quizSentLcdNumber"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QLabel" name="quizReceivedLabel">
+         <property name="text">
+          <string>Quiz(s) Received:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="quizReceivedLcdNumber"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>110</y>
+      <width>341</width>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="startServerPushButton">
+       <property name="text">
+        <string>Start Quiz</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="okPushButton">
        <property name="text">
@@ -90,7 +140,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>549</width>
+     <width>724</width>
      <height>21</height>
     </rect>
    </property>
