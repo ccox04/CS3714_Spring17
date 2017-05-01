@@ -88,5 +88,23 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
 //        }
     }
     //Add in save and restore instance states
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        userScore = savedInstanceState.getInt(MainActivity.USERSCORE);
+        totalNumberQuestions = savedInstanceState.getInt(MainActivity.NUMBERQUESTIONS);
+        fluff.setText("Your Score was:");
+        score.setText(String.valueOf(userScore) + "%");
+        setImage();
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(MainActivity.USERSCORE, userScore);
+        outState.putInt(MainActivity.NUMBERQUESTIONS, totalNumberQuestions);
+        super.onSaveInstanceState(outState);
+    }
 }
 

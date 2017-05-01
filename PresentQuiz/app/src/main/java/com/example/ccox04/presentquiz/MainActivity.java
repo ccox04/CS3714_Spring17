@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 
     public static final String CORRECTANSWERSTRING_MCLIST = "correctAnswerString_mclist";
     public static final String USERTOTALCORRECTANSWERS = "userTotalCorrectAnswers";
+    public static final String USERSCORE = "userScore";
 
     Bundle quizBundle, resultBundle;
 
