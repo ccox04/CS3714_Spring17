@@ -14,6 +14,8 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
     TextView fluff;
     Button end;
     ImageView image;
+    String questionNum;
+    String correct;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,21 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         fluff = (TextView)findViewById(R.id.fluff);
         end = (Button)findViewById(R.id.restart);
         image = (ImageView)findViewById(R.id.pic);
+        questionNum = intent.getStringExtra(MainActivity.NUMBERQUESTIONS);
+        correct = intent.getStringExtra(MainActivity.CORRECT);
+        int questions = Integer.parseInt(questionNum);
+        if(questions > 0)
+        {
+            int percent = Math.round(100*(Float.parseFloat(correct)/questions));
+            setImage(percent);
+            fluff.setText("Multiple choice score of:");
+            score.setText(percent+"%");
+        }
+        else
+        {
+            fluff.setText("Questions will be graded by the examiner");
 
+        }
             //fluff.setText("Your Score was:");
             //String s = intent.getStringExtra(MultipleChoice.SCORE);
             //score.setText(s+"%");
@@ -32,9 +48,9 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         end.setOnClickListener(this);
     }
 
-    private void setImage(String s)
+    private void setImage(int a)
     {
-        int a = Integer.parseInt(s);
+
         if(a == 100)
         {
             image.setImageResource(R.drawable.amazing);

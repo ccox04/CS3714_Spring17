@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 
     public static final String CLIENTIN_STATUS = "clientIn_status";
     public static final String CLIENTOUT_STATUS = "clientOut_status";
-
+    public static final String CORRECT = "correct";
+    public static final String Multi = "multi";
     Bundle quizBundle;
 
     int number_questions, questionCounter;
@@ -351,10 +352,21 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 startActivityForResult(getShortAnswerIntent, intentResult);
             }
         }
-        else
+        else/////////////////////////////////To get the last screen to be the Results screen.
         {
             Intent results = new Intent(this, Results.class);
-            results.putExtra(this.NUMBERQUESTIONS,number_questions);
+            int ss = 0;
+            for(int i : quizInfo.question_type_list)
+            {
+                if(i == 0)
+                {
+                    ss++;
+                }
+            }
+            results.putExtra(this.NUMBERQUESTIONS,ss+"");
+            results.putExtra(this.CORRECT, quizInfo.correctAnswer_mc);
+
+            startActivity(results);
         }
         Log.d(TAG,"MainActivity : Leaving checkNumberQuestions");
 
