@@ -401,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
     {
         if(view.getId() == this.scanImageBtn.getId() && canCLick &&(this.userIDEditText.getText().toString().length() != 0))
         {
+            quizInfo.setUserID(this.userIDEditText.getText().toString());
             takepic();
         }
     }
