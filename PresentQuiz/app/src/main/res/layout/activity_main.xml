@@ -25,6 +25,7 @@
             android:id="@+id/userIDEditTextMain"
             android:background="@color/colorAccent"
             tools:textColorHint="@color/hint"
+            android:textColor="@android:color/white"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:textAlignment="center" />

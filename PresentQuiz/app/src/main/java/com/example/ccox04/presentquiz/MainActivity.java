@@ -229,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                     //R.drawable.sample);
 
             Matrix matrix = new Matrix();
-            matrix.postRotate(270);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,600,600,true);
+            matrix.postRotate(270);//Change to 90 for Chris
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,600,600,true);//Change to 800 for Chris
             Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
             Frame frame = new Frame.Builder().setBitmap(rotatedBitmap).build();
 
