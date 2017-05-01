@@ -1,8 +1,12 @@
 package com.example.ccox04.presentquiz;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +21,12 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     String answerA, answerB, answerC, answerD, answerE, currentQuestion;
 
     int correctAnswer;
-
+    private int chosen;
+    private Toast toast;
+    private LayoutInflater lay;
+    View toastview;
+    String accent = "#616BCF";
+    String primary = "#ddcf4d";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +38,12 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         answerDBtn = (Button) findViewById(R.id.answerDButtonMC);
         answerEBtn = (Button) findViewById(R.id.answerEButtonMC);
         correctAnswer = 0;
+        Integer.decode(accent);
         questionTextView = (TextView) findViewById(R.id.question_mcTextView);
 
         Intent getMainIntent = getIntent();
         Bundle getMainBundle = getMainIntent.getExtras();
+        toast = new Toast(this);
         //Log.d(TAG, "PlayingActivity onCreate: BEFORE IF Background Song.");
         if (getMainIntent.hasExtra(MainActivity.QUESTION_MC)) {
             //Log.d(TAG, "PlayingActivity onCreate: Printing Background Song.");
@@ -48,70 +59,116 @@ public class MultipleChoiceActivity extends AppCompatActivity {
             answerCBtn.setText(answerC);
             answerDBtn.setText(answerD);
             answerEBtn.setText(answerE);
+            chosen = 0;
             correctAnswer = getMainBundle.getInt(MainActivity.CORRECTANSWER_MC);
+
+
+
+
+
         }
     }
 
 
     public void onClickAnswerA(View view){
-        if(Objects.equals(1,correctAnswer)){
-            //showShrtToast("You Answered Correctly! :)");
-        }//
-        else{
-            //showShrtToast("You Answered Incorrectly :(");
+        if(chosen != 1)
+        {
+            resetColor(chosen);
+            chosen = 1;
+            answerABtn.setBackgroundColor(Color.rgb(221,207,77));
+            Toast.makeText(this, "Click A again to confirm answer",Toast.LENGTH_SHORT).show();
         }
-        Intent goToMainActivity = new Intent();
-        goToMainActivity.putExtra("MCQuestionCompleted", answerA);
-        setResult(RESULT_OK, goToMainActivity);
-        finish();
+        else {
+
+            Intent goToMainActivity = new Intent();
+            goToMainActivity.putExtra("MCQuestionCompleted", answerA);
+            setResult(RESULT_OK, goToMainActivity);
+            finish();
+        }
     }
+
+    private void resetColor(int chosen) {
+        if(chosen == 1)
+        {
+            answerABtn.setBackgroundColor(Color.parseColor(accent));
+        }
+        else if(chosen == 2)
+        {
+            answerBBtn.setBackgroundColor(Color.parseColor(accent));
+        }
+        else if(chosen == 3)
+        {
+            answerCBtn.setBackgroundColor(Color.parseColor(accent));
+        }
+        else if(chosen == 4)
+        {
+            answerDBtn.setBackgroundColor(Color.parseColor(accent));
+        }
+        else if(chosen == 5)
+        {
+            answerEBtn.setBackgroundColor(Color.parseColor(accent));
+        }
+
+    }
+
     public void onClickAnswerB(View view){
-        if(Objects.equals(2,correctAnswer)){
-            //showShrtToast("You Answered Correctly! :)");
+        if(chosen != 2)
+        {
+            resetColor(chosen);
+            chosen = 2;
+            answerBBtn.setBackgroundColor(Color.rgb(221,207,77));
+            Toast.makeText(this, "Click B again to confirm answer",Toast.LENGTH_SHORT).show();
         }
-        else{
-            //showShrtToast("You Answered Incorrectly :(");
+        else {
+            Intent goToMainActivity = new Intent();
+            goToMainActivity.putExtra("MCQuestionCompleted", answerB);
+            setResult(RESULT_OK, goToMainActivity);
+            finish();
         }
-        Intent goToMainActivity = new Intent();
-        goToMainActivity.putExtra("MCQuestionCompleted", answerB);
-        setResult(RESULT_OK, goToMainActivity);
-        finish();
     }
     public void onClickAnswerC(View view){
-        if(Objects.equals(3,correctAnswer)){
-            //showShrtToast("You Answered Correctly! :)");
+        if(chosen != 3)
+        {
+            resetColor(chosen);
+            chosen = 3;
+            answerCBtn.setBackgroundColor(Color.rgb(221,207,77));
+            Toast.makeText(this, "Click C again to confirm answer",Toast.LENGTH_SHORT).show();
         }
-        else{
-            //showShrtToast("You Answered Incorrectly :(");
+        else {
+            Intent goToMainActivity = new Intent();
+            goToMainActivity.putExtra("MCQuestionCompleted", answerC);
+            setResult(RESULT_OK, goToMainActivity);
+            finish();
         }
-        Intent goToMainActivity = new Intent();
-        goToMainActivity.putExtra("MCQuestionCompleted", answerC);
-        setResult(RESULT_OK, goToMainActivity);
-        finish();
     }
     public void onClickAnswerD(View view){
-        if(Objects.equals(4,correctAnswer)){
-            //showShrtToast("You Answered Correctly! :)");
+        if(chosen != 4)
+        {
+            resetColor(chosen);
+            chosen = 4;
+            answerDBtn.setBackgroundColor(Color.rgb(221,207,77));
+            Toast.makeText(this, "Click D again to confirm answer",Toast.LENGTH_SHORT).show();
         }
-        else{
-            //showShrtToast("You Answered Incorrectly :(");
+        else {
+            Intent goToMainActivity = new Intent();
+            goToMainActivity.putExtra("MCQuestionCompleted", answerD);
+            setResult(RESULT_OK, goToMainActivity);
+            finish();
         }
-        Intent goToMainActivity = new Intent();
-        goToMainActivity.putExtra("MCQuestionCompleted", answerD);
-        setResult(RESULT_OK, goToMainActivity);
-        finish();
     }
     public void onClickAnswerE(View view){
-        if(Objects.equals(5,correctAnswer)){
-            //showShrtToast("You Answered Correctly! :)");
+        if(chosen != 5) {
+            resetColor(chosen);
+            chosen = 5;
+            answerEBtn.setBackgroundColor(Color.rgb(221,207,77));
+            Toast.makeText(this, "Click E again to confirm answer", Toast.LENGTH_SHORT).show();
         }
-        else{
-            //showShrtToast("You Answered Incorrectly :(");
+        else {
+            Intent goToMainActivity = new Intent();
+            goToMainActivity.putExtra("MCQuestionCompleted", answerE);
+            setResult(RESULT_OK, goToMainActivity);
+            finish();
         }
-        Intent goToMainActivity = new Intent();
-        goToMainActivity.putExtra("MCQuestionCompleted", answerE);
-        setResult(RESULT_OK, goToMainActivity);
-        finish();
 
     }
 

@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                     }
                 }
                 portInt = Integer.parseInt(processedString);
-                Toast.makeText(this, ipAddressString + "  port: " + portInt, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, ipAddressString + "  port: " + portInt, Toast.LENGTH_SHORT).show();
 //                Log.d(TAG, ipAddressString+ " port: "+portInt);
                 onConnect();
 

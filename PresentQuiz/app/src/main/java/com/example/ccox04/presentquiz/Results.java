@@ -44,12 +44,19 @@ public class Results extends AppCompatActivity {
             totalNumberQuestions = Integer.parseInt(getMainBundle.getString(MainActivity.NUMBERQUESTIONS));
             userScore = Integer.parseInt(getMainBundle.getString(MainActivity.USERTOTALCORRECTANSWERS));
         }
-        float abc = ((float)userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
-        userScore = Math.round(abc);
-        fluff.setText("Your Score was:");
+        if(totalNumberQuestions != 0) {
+            float abc = ((float) userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
+            userScore = Math.round(abc);
+            fluff.setText("Your multiple choice score was:");
+            score.setText(String.valueOf(userScore) + "%");
+        }
+        else
+        {
+            fluff.setText("Instructor will grade questiosn");
+        }
         //fluff.setText("Your Score was:");
         //String s = intent.getStringExtra(MultipleChoice.SCORE);
-        score.setText(String.valueOf(userScore) + "%");
+
         //setImage(s);
 
         setImage();

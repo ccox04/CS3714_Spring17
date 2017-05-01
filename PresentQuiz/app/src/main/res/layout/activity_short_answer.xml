@@ -33,7 +33,9 @@
             android:layout_weight="4"
             android:textAlignment="center"
             android:id="@+id/answer_saEditText"
+            android:textColorHint="@color/hint"
             android:background="@color/colorAccent"
+            android:textColor="@android:color/white"
             android:hint="Type your answer here."/>
 
         <TextView
