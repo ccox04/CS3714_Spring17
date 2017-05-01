@@ -15,6 +15,7 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
     Button end;
     ImageView image;
     int userScore, totalNumberQuestions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +25,20 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         fluff = (TextView)findViewById(R.id.fluff);
         end = (Button)findViewById(R.id.restart);
         image = (ImageView)findViewById(R.id.pic);
-
+/*        questionNum = intent.getStringExtra(MainActivity.NUMBERQUESTIONS);
+        correct = intent.getStringExtra(MainActivity.CORRECT);
+        int questions = Integer.parseInt(questionNum);
+        if(questions > 0)
+        {
+            int percent = Math.round(100*(Float.parseFloat(correct)/questions));
+            setImage(percent);
+            fluff.setText("Multiple choice score of:");
+            score.setText(percent+"%");
+        }
+        else
+        {
+            fluff.setText("Questions will be graded by the examiner");
+            */
         Intent getMainIntent = getIntent();
         Bundle getMainBundle = getMainIntent.getExtras();
         if (getMainIntent.hasExtra(MainActivity.NUMBERQUESTIONS)) {
@@ -34,6 +48,7 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         userScore = (userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
 
         fluff.setText("Your Score was:");
+            //fluff.setText("Your Score was:");
             //String s = intent.getStringExtra(MultipleChoice.SCORE);
         score.setText(String.valueOf(userScore) + "%");
             //setImage(s);
@@ -43,10 +58,10 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         end.setOnClickListener(this);
     }
 
+
     private void setImage()
     {
-        if(userScore == 100)
-        {
+        if(userScore == 100){
             image.setImageResource(R.drawable.amazing);
         }
         else if(userScore >= 80)
