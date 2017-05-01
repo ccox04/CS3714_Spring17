@@ -14,6 +14,7 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
     TextView fluff;
     Button end;
     ImageView image;
+    int userScore, totalNumberQuestions;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,26 +25,35 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         end = (Button)findViewById(R.id.restart);
         image = (ImageView)findViewById(R.id.pic);
 
-            //fluff.setText("Your Score was:");
+        Intent getMainIntent = getIntent();
+        Bundle getMainBundle = getMainIntent.getExtras();
+        if (getMainIntent.hasExtra(MainActivity.NUMBERQUESTIONS)) {
+            totalNumberQuestions = Integer.parseInt(getMainBundle.getString(MainActivity.NUMBERQUESTIONS));
+            userScore = Integer.parseInt(getMainBundle.getString(MainActivity.USERTOTALCORRECTANSWERS));
+        }
+        userScore = (userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
+
+        fluff.setText("Your Score was:");
             //String s = intent.getStringExtra(MultipleChoice.SCORE);
-            //score.setText(s+"%");
+        score.setText(String.valueOf(userScore) + "%");
             //setImage(s);
+
+        setImage();
 
         end.setOnClickListener(this);
     }
 
-    private void setImage(String s)
+    private void setImage()
     {
-        int a = Integer.parseInt(s);
-        if(a == 100)
+        if(userScore == 100)
         {
             image.setImageResource(R.drawable.amazing);
         }
-        else if(a >= 80)
+        else if(userScore >= 80)
         {
             image.setImageResource(R.drawable.good);
         }
-        else if(a >= 60)
+        else if(userScore >= 60)
         {
             image.setImageResource(R.drawable.close);
         }
@@ -55,11 +65,12 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == end.getId())
-        {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);//Go back to connect screen
-        }
+        // I think we just want to keep them on the results screen instead of taking them back to start the quiz again
+//        if(view.getId() == end.getId())
+//        {
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);//Go back to connect screen
+//        }
     }
     //Add in save and restore instance states
 }

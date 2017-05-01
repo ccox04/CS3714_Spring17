@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
     JSONObject jsonReader;
     Intent getMultipleChoiceActivityIntent;
     Intent getShortAnswerActivityIntent;
+    Intent sendResultActivityIntent;
     private boolean canCLick = false;
     final int intentResult = 1;
 
@@ -100,7 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
     public static final String CLIENTIN_STATUS = "clientIn_status";
     public static final String CLIENTOUT_STATUS = "clientOut_status";
 
-    Bundle quizBundle;
+    public static final String CORRECTANSWERSTRING_MCLIST = "correctAnswerString_mclist";
+    public static final String USERTOTALCORRECTANSWERS = "userTotalCorrectAnswers";
+
+    Bundle quizBundle, resultBundle;
 
     int number_questions, questionCounter;
     String CurrentPhotoPath;
@@ -122,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         getMultipleChoiceActivityIntent = new Intent(this, MultipleChoiceActivity.class);
         getShortAnswerActivityIntent = new Intent(this, ShortAnswerActivity.class);
         quizBundle = new Bundle();
+        resultBundle = new Bundle();
         quizInfo = new QuizInfo();
         detect = new BarcodeDetector.Builder(getApplicationContext())
                 .setBarcodeFormats(Barcode.DATA_MATRIX|Barcode.QR_CODE)
@@ -150,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         quizInfo.setAnswerD_list(savedInstanceState.getStringArrayList(ANSWERDLIST));
         quizInfo.setAnswerE_list(savedInstanceState.getStringArrayList(ANSWERELIST));
         quizInfo.setCorrectAnswer_mc_list(savedInstanceState.getIntegerArrayList(CORRECTANSWER_MCLIST));
+        quizInfo.setCorrectAnswerString_mc_list(savedInstanceState.getStringArrayList(CORRECTANSWERSTRING_MCLIST));
         quizInfo.setAnswerSA_list(savedInstanceState.getStringArrayList(ANSWER_SALIST));
         quizInfo.setUserAnswers_list(savedInstanceState.getStringArrayList(USERANSWERS_LIST));
         quizInfo.setQuestion_type_list(savedInstanceState.getIntegerArrayList(QUESTIONTYPE_LIST));
@@ -182,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         outState.putStringArrayList(ANSWERDLIST, quizInfo.getAnswerD_list());
         outState.putStringArrayList(ANSWERELIST, quizInfo.getAnswerE_list());
         outState.putIntegerArrayList(CORRECTANSWER_MCLIST, quizInfo.getCorrectAnswer_mc_list());
+        outState.putStringArrayList(CORRECTANSWERSTRING_MCLIST, quizInfo.getCorrectAnswerString_mc_list());
         outState.putStringArrayList(ANSWER_SALIST, quizInfo.getAnswerSA_list());
         outState.putStringArrayList(USERANSWERS_LIST, quizInfo.getUserAnswers_list());
         outState.putIntegerArrayList(QUESTIONTYPE_LIST, quizInfo.getQuestion_type_list());
@@ -351,13 +358,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 startActivityForResult(getShortAnswerIntent, intentResult);
             }
         }
-        else
-        {
-            Intent results = new Intent(this, Results.class);
-            results.putExtra(this.NUMBERQUESTIONS,number_questions);
-        }
         Log.d(TAG,"MainActivity : Leaving checkNumberQuestions");
-
     }
 
     @Override
@@ -458,6 +459,45 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 //            clientAsyncTask = new ClientAsyncTask();
 //            quizTextView.setText(quizInfo.getAnswerA());
             showShrtToast("Quiz Submitted");
+            // Checking how many answers were correct
+            int userCorrectTotal = 0;
+            // This is to determine how many questions the user had correct
+            for(int i = 0; i < number_questions; i++){
+                int correctAnswerMC = quizInfo.getCorrectAnswer_mc_list().get(i);
+                switch (correctAnswerMC){
+                    case 1:
+                        if(Objects.equals(quizInfo.getAnswerA_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            userCorrectTotal++;
+                        }
+                        break;
+                    case 2:
+                        if(Objects.equals(quizInfo.getAnswerB_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            userCorrectTotal++;
+                        }
+                        break;
+                    case 3:
+                        if(Objects.equals(quizInfo.getAnswerC_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            userCorrectTotal++;
+                        }
+                        break;
+                    case 4:
+                        if(Objects.equals(quizInfo.getAnswerD_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            userCorrectTotal++;
+                        }
+                        break;
+                    case 5:
+                        if(Objects.equals(quizInfo.getAnswerE_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            userCorrectTotal++;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            resultBundle.putString(NUMBERQUESTIONS, String.valueOf(number_questions));
+            resultBundle.putString(USERTOTALCORRECTANSWERS, String.valueOf(userCorrectTotal));
+            sendResultActivityIntent.putExtras(resultBundle);
+            startActivity(sendResultActivityIntent);
             super.onPostExecute(aVoid);
         }
 
@@ -466,11 +506,11 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         protected Void doInBackground(Integer... params) {
             Log.d(TAG,"PlayingActivity : Entered doInBackground");
             try{
-                Log.d(TAG, "IP = " + ipAddressString);
-                Log.d(TAG, "PORT = " + portInt);
                 socket = new Socket(ipAddressString, portInt);
 //                socket = new Socket("192.168.0.7", portInt);
-                String sendQuizAnswerString = quizInfo.getUserID() + "|||";
+                String sendQuizAnswerString = "Student Identifier: " + quizInfo.getUserID() + "|";
+                String userAnswerString = "Student Answered: ";
+                String correctAnswerString = "Correct Answer: ";
                 DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
                 Log.d(TAG,"doInBackground number of questions = " + number_questions);
                 for(int i = 0; i < number_questions; i++) {
@@ -478,24 +518,34 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                     if (Objects.equals(0, quizInfo.getQuestion_type_list().get(i))) { // 0 = Multiple Choice
                         Log.d(TAG,"doInBackground has quiz_mc !");
                         // Setting question and answers for Multiple choice
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerA_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerB_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerC_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerD_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerE_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getCorrectAnswer_mc_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getUserAnswers_list().get(i) + "|||";
-                        DOS.writeUTF(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file.
+                        sendQuizAnswerString = sendQuizAnswerString + String.valueOf(i+1) + ". ";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerA_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerB_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerC_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerD_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerE_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + correctAnswerString + quizInfo.getCorrectAnswerString_mc_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + userAnswerString + quizInfo.getUserAnswers_list().get(i) + "|";
+                        Log.d(TAG,"sendString MC = " + sendQuizAnswerString);
+                        byte[] quizBuffer = sendQuizAnswerString.getBytes("UTF-8");
+                        DOS.write(quizBuffer, 0, quizBuffer.length);
+//                        DOS.writeBytes(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file.
+                        sendQuizAnswerString = "";
                     }
 
                     // Checking if its a short answer quiz
                     else if (Objects.equals(1, quizInfo.getQuestion_type_list().get(i))) { // 1 = Short Answer
                         // Setting question and answers for Short answer quiz
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerSA_list().get(i) + "|||";
-                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getUserAnswers_list().get(i) + "|||";
-                        DOS.writeUTF(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file.
+                        sendQuizAnswerString = sendQuizAnswerString + String.valueOf(i+1) + ". ";
+                        sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + correctAnswerString + quizInfo.getAnswerSA_list().get(i) + "|";
+                        sendQuizAnswerString =  sendQuizAnswerString + userAnswerString + quizInfo.getUserAnswers_list().get(i) + "|";
+                        Log.d(TAG,"sendString SA = " + sendQuizAnswerString);
+                        byte[] buf = sendQuizAnswerString.getBytes("UTF-8");
+                        DOS.write(buf, 0, buf.length);
+//                        DOS.writeBytes(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file. UTF
+                        sendQuizAnswerString = "";
                     }
                 }
 

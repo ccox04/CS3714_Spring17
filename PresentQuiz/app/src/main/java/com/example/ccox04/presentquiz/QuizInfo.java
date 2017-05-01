@@ -17,6 +17,7 @@ public class QuizInfo {
     ArrayList<String> answerD_list = new ArrayList<>();
     ArrayList<String> answerE_list = new ArrayList<>();
     ArrayList<Integer> correctAnswer_mc_list = new ArrayList<>();  // 1 = answerA,  2 = answerB,  3 = answerC,  4 = answerD,  5 = answerE
+    ArrayList<String> correctAnswerString_mc_list = new ArrayList<>();  // 1 = answerA,  2 = answerB,  3 = answerC,  4 = answerD,  5 = answerE
     ArrayList<String> answerSA_list = new ArrayList<>();
     ArrayList<String> userAnswers_list = new ArrayList<>();
     int serverPort, number_questions, question_type, correctAnswer_mc;
@@ -191,6 +192,26 @@ public class QuizInfo {
 
     public void setCorrectAnswer_mc(String correctAnswer_mc) {
         correctAnswer_mc_list.add(Integer.parseInt(correctAnswer_mc));
+        switch (correctAnswer_mc){
+            case "1":
+                correctAnswerString_mc_list.add("A");
+                break;
+            case "2":
+                correctAnswerString_mc_list.add("B");
+                break;
+            case "3":
+                correctAnswerString_mc_list.add("C");
+                break;
+            case "4":
+                correctAnswerString_mc_list.add("D");
+                break;
+            case "5":
+                correctAnswerString_mc_list.add("E");
+                break;
+            default:
+                correctAnswerString_mc_list.add("NA");
+                break;
+        }
         this.correctAnswer_mc = Integer.parseInt(correctAnswer_mc);
     }
 
@@ -229,6 +250,14 @@ public class QuizInfo {
     public void setUserAnswerSA(String userAnswerSA) {
         userAnswers_list.add(userAnswerSA);
         this.userAnswerSA = userAnswerSA;
+    }
+
+    public ArrayList<String> getCorrectAnswerString_mc_list() {
+        return correctAnswerString_mc_list;
+    }
+
+    public void setCorrectAnswerString_mc_list(ArrayList<String> correctAnswerString_mc_list) {
+        this.correctAnswerString_mc_list = correctAnswerString_mc_list;
     }
 
     public String getUserAnswerMC() {
