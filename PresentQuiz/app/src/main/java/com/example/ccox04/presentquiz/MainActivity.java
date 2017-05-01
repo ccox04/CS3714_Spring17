@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 
         getMultipleChoiceActivityIntent = new Intent(this, MultipleChoiceActivity.class);
         getShortAnswerActivityIntent = new Intent(this, ShortAnswerActivity.class);
+        sendResultActivityIntent = new Intent(this, Results.class);
         quizBundle = new Bundle();
         resultBundle = new Bundle();
         quizInfo = new QuizInfo();
@@ -236,53 +237,53 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
             Frame frame = new Frame.Builder().setBitmap(bitmap).build();
             SparseArray<Barcode> bars = detect.detect(frame);
 
-           if (!detect.isOperational() || bars.size() == 0) {
-               Toast.makeText(this, "Retake image. No code found",Toast.LENGTH_SHORT).show();
+            if (!detect.isOperational() || bars.size() == 0) {
+                Toast.makeText(this, "Retake image. No code found",Toast.LENGTH_SHORT).show();
             }
             else {
-               //Toast.makeText(this, bars.size() + "", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, bars.size() + "", Toast.LENGTH_LONG).show();
 
-               Barcode server = bars.valueAt(0);
-               String str = server.displayValue;
-               Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-               String[] s = str.split("|");//Not working correctly, but it will do
-               Toast.makeText(this, userIDEditText.getText().toString(), Toast.LENGTH_SHORT).show();
-               Log.d(TAG, str +" "+ s.length);
-               String processedString = "";
+                Barcode server = bars.valueAt(0);
+                String str = server.displayValue;
+                Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+                String[] s = str.split("|");//Not working correctly, but it will do
+                Toast.makeText(this, userIDEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, str +" "+ s.length);
+                String processedString = "";
 
-               boolean starter = false;
-               boolean porter = false;
-               for(int i = 0; i < s.length;i++)
-               {
-                   if(!starter)
-                   {
-                       if(s[i].compareTo(".") == 0)
-                       {
-                           starter = true;
-                       }
-                   }
-                   else
-                   {
-                       if(s[i].compareTo("|") == 0)
-                       {
+                boolean starter = false;
+                boolean porter = false;
+                for(int i = 0; i < s.length;i++)
+                {
+                    if(!starter)
+                    {
+                        if(s[i].compareTo(".") == 0)
+                        {
+                            starter = true;
+                        }
+                    }
+                    else
+                    {
+                        if(s[i].compareTo("|") == 0)
+                        {
                             porter = true;
-                       }
-                       else if(!porter)
-                       {
-                           ipAddressString = ipAddressString + s[i];
-                       }
-                       else
-                       {
-                           processedString = processedString + s[i];
-                       }
-                   }
-               }
-               portInt = Integer.parseInt(processedString);
-               Toast.makeText(this, ipAddressString + "  port: " + portInt, Toast.LENGTH_SHORT).show();
-               Log.d(TAG, ipAddressString+ " port: "+portInt);
-               onConnect();
+                        }
+                        else if(!porter)
+                        {
+                            ipAddressString = ipAddressString + s[i];
+                        }
+                        else
+                        {
+                            processedString = processedString + s[i];
+                        }
+                    }
+                }
+                portInt = Integer.parseInt(processedString);
+                Toast.makeText(this, ipAddressString + "  port: " + portInt, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, ipAddressString+ " port: "+portInt);
+                onConnect();
 
-           }
+            }
 
         }
         else if(resultCode != 0){//May edit out
@@ -377,8 +378,8 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 
 
     public void onConnect(){
-       // ipAddressString = ipEditText.getText().toString(); // Set this to correct IP Address from QR code
-       // portInt = Integer.parseInt(portEditText.getText().toString());  // Set this to correct IP PORT from QR code
+        // ipAddressString = ipEditText.getText().toString(); // Set this to correct IP Address from QR code
+        // portInt = Integer.parseInt(portEditText.getText().toString());  // Set this to correct IP PORT from QR code
         if (clientInAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
             //Log.d(TAG,"MainActivity : in If case 0");
             clientInAsyncTask = new ClientInAsyncTask();
@@ -460,45 +461,68 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 //            clientAsyncTask = new ClientAsyncTask();
 //            quizTextView.setText(quizInfo.getAnswerA());
             showShrtToast("Quiz Submitted");
+            Log.d(TAG,"onPostExecute Entered");
             // Checking how many answers were correct
             int userCorrectTotal = 0;
             // This is to determine how many questions the user had correct
             for(int i = 0; i < number_questions; i++){
+                Log.d(TAG,"onPostExecute Loop i = " + i);
                 int correctAnswerMC = quizInfo.getCorrectAnswer_mc_list().get(i);
+                Log.d(TAG,"onPostExecute correctAnswerMC = " + correctAnswerMC);
                 switch (correctAnswerMC){
                     case 1:
+                        Log.d(TAG,"onPostExecute Entered switch case 1");
                         if(Objects.equals(quizInfo.getAnswerA_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            Log.d(TAG,"onPostExecute IN IF switch case 1");
                             userCorrectTotal++;
                         }
+                        Log.d(TAG,"onPostExecute Leaving switch case 1");
                         break;
                     case 2:
+                        Log.d(TAG,"onPostExecute Entered switch case 2");
                         if(Objects.equals(quizInfo.getAnswerB_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            Log.d(TAG,"onPostExecute IN IF switch case 2");
                             userCorrectTotal++;
                         }
+                        Log.d(TAG,"onPostExecute Leaving switch case 2");
                         break;
                     case 3:
+                        Log.d(TAG,"onPostExecute Entered switch case 3");
                         if(Objects.equals(quizInfo.getAnswerC_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            Log.d(TAG,"onPostExecute IN IF switch case 3");
                             userCorrectTotal++;
                         }
+                        Log.d(TAG,"onPostExecute Leaving switch case 3");
                         break;
                     case 4:
+                        Log.d(TAG,"onPostExecute Entered switch case 4");
                         if(Objects.equals(quizInfo.getAnswerD_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            Log.d(TAG,"onPostExecute IN IF switch case 4");
                             userCorrectTotal++;
                         }
+                        Log.d(TAG,"onPostExecute Leaving switch case 4");
                         break;
                     case 5:
+                        Log.d(TAG,"onPostExecute Entered switch case 5");
                         if(Objects.equals(quizInfo.getAnswerE_list().get(i), quizInfo.getUserAnswers_list().get(i))){
+                            Log.d(TAG,"onPostExecute IN IF switch case 5");
                             userCorrectTotal++;
                         }
+                        Log.d(TAG,"onPostExecute Leaving switch case 5");
                         break;
                     default:
                         break;
                 }
             }
-            resultBundle.putString(NUMBERQUESTIONS, String.valueOf(number_questions));
+            Log.d(TAG,"onPostExecute After Switch number_questions = " + number_questions);
+            resultBundle.putString(NUMBERQUESTIONS, String.valueOf(quizInfo.getNumber_questions()));
+            Log.d(TAG,"onPostExecute After Switch userCorrectTotal = " + userCorrectTotal);
             resultBundle.putString(USERTOTALCORRECTANSWERS, String.valueOf(userCorrectTotal));
+            Log.d(TAG,"onPostExecute putExtras ");
             sendResultActivityIntent.putExtras(resultBundle);
+            Log.d(TAG,"onPostExecute startActivity");
             startActivity(sendResultActivityIntent);
+            Log.d(TAG,"onPostExecute Leaving");
             super.onPostExecute(aVoid);
         }
 

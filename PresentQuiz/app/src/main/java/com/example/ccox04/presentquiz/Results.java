@@ -48,10 +48,10 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         userScore = (userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
 
         fluff.setText("Your Score was:");
-            //fluff.setText("Your Score was:");
-            //String s = intent.getStringExtra(MultipleChoice.SCORE);
+        //fluff.setText("Your Score was:");
+        //String s = intent.getStringExtra(MultipleChoice.SCORE);
         score.setText(String.valueOf(userScore) + "%");
-            //setImage(s);
+        //setImage(s);
 
         setImage();
 
