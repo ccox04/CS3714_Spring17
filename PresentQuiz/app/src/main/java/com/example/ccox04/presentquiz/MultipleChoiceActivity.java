@@ -55,10 +55,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
 
     public void onClickAnswerA(View view){
         if(Objects.equals(1,correctAnswer)){
-            showShrtToast("You Answered Correctly! :)");
-        }
+            //showShrtToast("You Answered Correctly! :)");
+        }//
         else{
-            showShrtToast("You Answered Incorrectly :(");
+            //showShrtToast("You Answered Incorrectly :(");
         }
         Intent goToMainActivity = new Intent();
         goToMainActivity.putExtra("MCQuestionCompleted", answerA);
@@ -67,10 +67,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     }
     public void onClickAnswerB(View view){
         if(Objects.equals(2,correctAnswer)){
-            showShrtToast("You Answered Correctly! :)");
+            //showShrtToast("You Answered Correctly! :)");
         }
         else{
-            showShrtToast("You Answered Incorrectly :(");
+            //showShrtToast("You Answered Incorrectly :(");
         }
         Intent goToMainActivity = new Intent();
         goToMainActivity.putExtra("MCQuestionCompleted", answerB);
@@ -79,10 +79,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     }
     public void onClickAnswerC(View view){
         if(Objects.equals(3,correctAnswer)){
-            showShrtToast("You Answered Correctly! :)");
+            //showShrtToast("You Answered Correctly! :)");
         }
         else{
-            showShrtToast("You Answered Incorrectly :(");
+            //showShrtToast("You Answered Incorrectly :(");
         }
         Intent goToMainActivity = new Intent();
         goToMainActivity.putExtra("MCQuestionCompleted", answerC);
@@ -91,10 +91,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     }
     public void onClickAnswerD(View view){
         if(Objects.equals(4,correctAnswer)){
-            showShrtToast("You Answered Correctly! :)");
+            //showShrtToast("You Answered Correctly! :)");
         }
         else{
-            showShrtToast("You Answered Incorrectly :(");
+            //showShrtToast("You Answered Incorrectly :(");
         }
         Intent goToMainActivity = new Intent();
         goToMainActivity.putExtra("MCQuestionCompleted", answerD);
@@ -103,10 +103,10 @@ public class MultipleChoiceActivity extends AppCompatActivity {
     }
     public void onClickAnswerE(View view){
         if(Objects.equals(5,correctAnswer)){
-            showShrtToast("You Answered Correctly! :)");
+            //showShrtToast("You Answered Correctly! :)");
         }
         else{
-            showShrtToast("You Answered Incorrectly :(");
+            //showShrtToast("You Answered Incorrectly :(");
         }
         Intent goToMainActivity = new Intent();
         goToMainActivity.putExtra("MCQuestionCompleted", answerE);

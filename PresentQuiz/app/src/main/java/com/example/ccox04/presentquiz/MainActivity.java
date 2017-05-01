@@ -245,10 +245,10 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 
                 Barcode server = bars.valueAt(0);
                 String str = server.displayValue;
-                Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
                 String[] s = str.split("|");//Not working correctly, but it will do
-                Toast.makeText(this, userIDEditText.getText().toString(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, str +" "+ s.length);
+                //Toast.makeText(this, userIDEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, str +" "+ s.length);
                 String processedString = "";
 
                 boolean starter = false;
@@ -280,28 +280,28 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 }
                 portInt = Integer.parseInt(processedString);
                 Toast.makeText(this, ipAddressString + "  port: " + portInt, Toast.LENGTH_SHORT).show();
-                Log.d(TAG, ipAddressString+ " port: "+portInt);
+//                Log.d(TAG, ipAddressString+ " port: "+portInt);
                 onConnect();
 
             }
 
         }
         else if(resultCode != 0){//May edit out
-            Log.d(TAG, "MainActivity : Entered onActivityResult");
+//            Log.d(TAG, "MainActivity : Entered onActivityResult");
             questionCounter++;
             if (data.hasExtra("MCQuestionCompleted")) {
-                Log.d(TAG, "MainActivity onActivityResult hasExtra MCQuestionCompleted");
-                Log.d(TAG, "MainActivity onActivityResult hasExtra MCQuestionCompleted = " + data.getStringExtra("MCQuestionCompleted"));
+//                Log.d(TAG, "MainActivity onActivityResult hasExtra MCQuestionCompleted");
+//                Log.d(TAG, "MainActivity onActivityResult hasExtra MCQuestionCompleted = " + data.getStringExtra("MCQuestionCompleted"));
                 quizInfo.setUserAnswerMC(data.getStringExtra("MCQuestionCompleted"));
                 checkNumberQuestions();
             } else if (data.hasExtra("SAQuestionCompleted")) {
-                Log.d(TAG, "MainActivity onActivityResult hasExtra SAQuestionCompleted");
-                Log.d(TAG, "MainActivity onActivityResult hasExtra SAQuestionCompleted = " + data.getStringExtra("SAQuestionCompleted"));
+//                Log.d(TAG, "MainActivity onActivityResult hasExtra SAQuestionCompleted");
+//                Log.d(TAG, "MainActivity onActivityResult hasExtra SAQuestionCompleted = " + data.getStringExtra("SAQuestionCompleted"));
                 quizInfo.setUserAnswerSA(data.getStringExtra("SAQuestionCompleted"));
                 checkNumberQuestions();
             }
             if (questionCounter == number_questions) {
-                Log.d(TAG, "MainActivity onActivityResult questionCounter == number_questions");
+//                Log.d(TAG, "MainActivity onActivityResult questionCounter == number_questions");
                 scanImageBtn.setEnabled(false);
 
                 if (clientInAsyncTask != null && clientInAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
@@ -323,20 +323,20 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                     clientOutAsyncTask.execute();
                 }
             }
-            Log.d(TAG, "MainActivity : Leaving onActivityResult");
+//            Log.d(TAG, "MainActivity : Leaving onActivityResult");
         }
     }
 
     private void checkNumberQuestions(){
-        Log.d(TAG,"MainActivity : Entered checkNumberQuestions");
-        Log.d(TAG,"MainActivity checkNumberQuestions questionCounter = " + questionCounter);
-        Log.d(TAG,"MainActivity checkNumberQuestions numberQuestions = " + number_questions);
+//        Log.d(TAG,"MainActivity : Entered checkNumberQuestions");
+//        Log.d(TAG,"MainActivity checkNumberQuestions questionCounter = " + questionCounter);
+//        Log.d(TAG,"MainActivity checkNumberQuestions numberQuestions = " + number_questions);
         if(questionCounter < number_questions){
-            Log.d(TAG,"MainActivity checkNumberQuestions IN FIRST IF");
+//            Log.d(TAG,"MainActivity checkNumberQuestions IN FIRST IF");
             // Send out intent to ask another question
             // This opens up multiple choice question
             if(Objects.equals(quizInfo.getQuestion_type_list().get(questionCounter), 0)) {
-                Log.d(TAG,"MainActivity checkNumberQuestions IN SECOND IF");
+//                Log.d(TAG,"MainActivity checkNumberQuestions IN SECOND IF");
                 Intent getMultipleChoiceIntent = new Intent(this, MultipleChoiceActivity.class);
                 Bundle quizMCBundle = new Bundle();
                 quizMCBundle.putString(ANSWERA, quizInfo.getAnswerA_list().get(questionCounter));
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
             }
             // This opens up short answer question
             else if(Objects.equals(quizInfo.getQuestion_type_list().get(questionCounter), 1)) {
-                Log.d(TAG,"MainActivity checkNumberQuestions IN ELSE IF");
+//                Log.d(TAG,"MainActivity checkNumberQuestions IN ELSE IF");
                 Intent getShortAnswerIntent = new Intent(this, ShortAnswerActivity.class);
                 Bundle quizSABundle = new Bundle();
                 quizSABundle.putString(QUESTION_SA, quizInfo.getQuestions_list().get(questionCounter));
@@ -461,61 +461,61 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         protected void onPostExecute(Void aVoid) {
 //            clientAsyncTask = new ClientAsyncTask();
 //            quizTextView.setText(quizInfo.getAnswerA());
-            showShrtToast("Quiz Submitted");
-            Log.d(TAG,"onPostExecute Entered");
+            //showShrtToast("Quiz Submitted");
+//            Log.d(TAG,"onPostExecute Entered");
             // Checking how many answers were correct
             int userCorrectTotal = 0;
             // This is to determine how many questions the user had correct
             for(int i = 0; i < number_questions; i++){
-                Log.d(TAG,"onPostExecute Loop i = " + i);
+//                Log.d(TAG,"onPostExecute Loop i = " + i);
                 int correctAnswerMC = quizInfo.getCorrectAnswer_mc_list().get(i);
-                Log.d(TAG,"onPostExecute correctAnswerMC = " + correctAnswerMC);
+//                Log.d(TAG,"onPostExecute correctAnswerMC = " + correctAnswerMC);
                 switch (correctAnswerMC){
                     case 1:
-                        Log.d(TAG,"onPostExecute Entered switch case 1");
+//                        Log.d(TAG,"onPostExecute Entered switch case 1");
                         if(Objects.equals(quizInfo.getAnswerA_list().get(i), quizInfo.getUserAnswers_list().get(i))){
                             Log.d(TAG,"onPostExecute IN IF switch case 1");
                             userCorrectTotal++;
                         }
-                        Log.d(TAG,"onPostExecute Leaving switch case 1");
+//                        Log.d(TAG,"onPostExecute Leaving switch case 1");
                         break;
                     case 2:
-                        Log.d(TAG,"onPostExecute Entered switch case 2");
+//                        Log.d(TAG,"onPostExecute Entered switch case 2");
                         if(Objects.equals(quizInfo.getAnswerB_list().get(i), quizInfo.getUserAnswers_list().get(i))){
                             Log.d(TAG,"onPostExecute IN IF switch case 2");
                             userCorrectTotal++;
                         }
-                        Log.d(TAG,"onPostExecute Leaving switch case 2");
+//                        Log.d(TAG,"onPostExecute Leaving switch case 2");
                         break;
                     case 3:
-                        Log.d(TAG,"onPostExecute Entered switch case 3");
+//                        Log.d(TAG,"onPostExecute Entered switch case 3");
                         if(Objects.equals(quizInfo.getAnswerC_list().get(i), quizInfo.getUserAnswers_list().get(i))){
                             Log.d(TAG,"onPostExecute IN IF switch case 3");
                             userCorrectTotal++;
                         }
-                        Log.d(TAG,"onPostExecute Leaving switch case 3");
+//                        Log.d(TAG,"onPostExecute Leaving switch case 3");
                         break;
                     case 4:
-                        Log.d(TAG,"onPostExecute Entered switch case 4");
+//                        Log.d(TAG,"onPostExecute Entered switch case 4");
                         if(Objects.equals(quizInfo.getAnswerD_list().get(i), quizInfo.getUserAnswers_list().get(i))){
                             Log.d(TAG,"onPostExecute IN IF switch case 4");
                             userCorrectTotal++;
                         }
-                        Log.d(TAG,"onPostExecute Leaving switch case 4");
+//                        Log.d(TAG,"onPostExecute Leaving switch case 4");
                         break;
                     case 5:
-                        Log.d(TAG,"onPostExecute Entered switch case 5");
+//                        Log.d(TAG,"onPostExecute Entered switch case 5");
                         if(Objects.equals(quizInfo.getAnswerE_list().get(i), quizInfo.getUserAnswers_list().get(i))){
                             Log.d(TAG,"onPostExecute IN IF switch case 5");
                             userCorrectTotal++;
                         }
-                        Log.d(TAG,"onPostExecute Leaving switch case 5");
+//                        Log.d(TAG,"onPostExecute Leaving switch case 5");
                         break;
                     default:
                         break;
                 }
             }
-            Log.d(TAG,"onPostExecute After Switch number_questions = " + number_questions);
+//            Log.d(TAG,"onPostExecute After Switch number_questions = " + number_questions);
             int multicounter = 0;
             for(int i : quizInfo.getQuestion_type_list())
             {
@@ -525,13 +525,13 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 }
             }
             resultBundle.putString(NUMBERQUESTIONS, String.valueOf(multicounter));
-            Log.d(TAG,"onPostExecute After Switch userCorrectTotal = " + userCorrectTotal);
+//            Log.d(TAG,"onPostExecute After Switch userCorrectTotal = " + userCorrectTotal);
             resultBundle.putString(USERTOTALCORRECTANSWERS, String.valueOf(userCorrectTotal));
-            Log.d(TAG,"onPostExecute putExtras ");
+//            Log.d(TAG,"onPostExecute putExtras ");
             sendResultActivityIntent.putExtras(resultBundle);
-            Log.d(TAG,"onPostExecute startActivity");
+//            Log.d(TAG,"onPostExecute startActivity");
             startActivity(sendResultActivityIntent);
-            Log.d(TAG,"onPostExecute Leaving");
+//            Log.d(TAG,"onPostExecute Leaving");
             super.onPostExecute(aVoid);
         }
 
@@ -546,11 +546,11 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 String userAnswerString = "Student Answered: ";
                 String correctAnswerString = "Correct Answer: ";
                 DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
-                Log.d(TAG,"doInBackground number of questions = " + number_questions);
+//                Log.d(TAG,"doInBackground number of qu
                 for(int i = 0; i < number_questions; i++) {
                     // Checking if its a multiple choice quiz
                     if (Objects.equals(0, quizInfo.getQuestion_type_list().get(i))) { // 0 = Multiple Choice
-                        Log.d(TAG,"doInBackground has quiz_mc !");
+                        //Log.d(TAG,"doInBackground has quiz_mc !");
                         // Setting question and answers for Multiple choice
                         sendQuizAnswerString = sendQuizAnswerString + String.valueOf(i+1) + ". ";
                         sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|";
@@ -561,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                         sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getAnswerE_list().get(i) + "|";
                         sendQuizAnswerString =  sendQuizAnswerString + correctAnswerString + quizInfo.getCorrectAnswerString_mc_list().get(i) + "|";
                         sendQuizAnswerString =  sendQuizAnswerString + userAnswerString + quizInfo.getUserAnswers_list().get(i) + "|";
-                        Log.d(TAG,"sendString MC = " + sendQuizAnswerString);
+//                        Log.d(TAG,"sendString MC = " + sendQuizAnswerString);
                         byte[] quizBuffer = sendQuizAnswerString.getBytes("UTF-8");
                         DOS.write(quizBuffer, 0, quizBuffer.length);
 //                        DOS.writeBytes(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file.
@@ -575,7 +575,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                         sendQuizAnswerString =  sendQuizAnswerString + quizInfo.getQuestions_list().get(i) + "|";
                         sendQuizAnswerString =  sendQuizAnswerString + correctAnswerString + quizInfo.getAnswerSA_list().get(i) + "|";
                         sendQuizAnswerString =  sendQuizAnswerString + userAnswerString + quizInfo.getUserAnswers_list().get(i) + "|";
-                        Log.d(TAG,"sendString SA = " + sendQuizAnswerString);
+//                        Log.d(TAG,"sendString SA = " + sendQuizAnswerString);
                         byte[] buf = sendQuizAnswerString.getBytes("UTF-8");
                         DOS.write(buf, 0, buf.length);
 //                        DOS.writeBytes(sendQuizAnswerString); // This is where we write the answer back to the server. The server then logs all answers to a text file. UTF
@@ -626,7 +626,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 
         @Override
         protected Void doInBackground(Integer... params) {
-            Log.d(TAG,"PlayingActivity : Entered doInBackground");
+//            Log.d(TAG,"PlayingActivity : Entered doInBackground");
             try{
                 Log.d(TAG, "IP = " + ipAddressString);
                 Log.d(TAG, "PORT = " + portInt);
@@ -639,24 +639,24 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 String response = convertStreamToString(inputStream);
 //                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 //                String inputString = bufferedReader.readLine();
-                Log.d(TAG," buffered = " + response);
+//                Log.d(TAG," buffered = " + response);
                 jsonReader = new JSONObject(response);
 
                 // Checking how many questions are in this quiz
                 JSONObject question_number = jsonReader.getJSONObject("number");
                 quizInfo.setNumber_questions(Integer.parseInt(question_number.getString("question_number")));
                 number_questions = quizInfo.getNumber_questions();
-                Log.d(TAG,"doInBackground number of questions = " + number_questions);
+//                Log.d(TAG,"doInBackground number of questions = " + number_questions);
                 for(int i = 0; i < number_questions; i++) {
                     // Checking if its a multiple choice quiz
                     if (jsonReader.has("quiz_mc" + i)) {
-                        Log.d(TAG,"doInBackground has quiz_mc !");
+//                        Log.d(TAG,"doInBackground has quiz_mc !");
                         // Setting question and answers for Multiple choice
                         JSONObject quiz_mc = jsonReader.getJSONObject("quiz_mc" + i);
                         quizInfo.setQuestion_type(0); // 0 = Multiple Choice
                         quizInfo.setQuestion_mc(quiz_mc.getString("question"));
                         quizInfo.setAnswerA(quiz_mc.getString("answerA"));
-                        Log.d(TAG,"doInBackground answerA = " + quizInfo.getAnswerA());
+//                        Log.d(TAG,"doInBackground answerA = " + quizInfo.getAnswerA());
                         quizInfo.setAnswerB(quiz_mc.getString("answerB"));
                         quizInfo.setAnswerC(quiz_mc.getString("answerC"));
                         quizInfo.setAnswerD(quiz_mc.getString("answerD"));
@@ -697,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         }
 
         private String convertStreamToString(InputStream is) {
-            Log.d(TAG,"Entered convertStreamToString");
+//            Log.d(TAG,"Entered convertStreamToString");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is , StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
 
@@ -706,11 +706,11 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 sb.append("{");
                 reader.readLine();
                 while (!Objects.equals(line = reader.readLine(), ENDMESSAGECHAR)){
-                    Log.d(TAG, "convertStreamToString in WHILE : " + line);
+//                    Log.d(TAG, "convertStreamToString in WHILE : " + line);
                     sb.append(line).append('\n');
                 }
             } catch (IOException e) {
-                Log.d(TAG, "convertStreamToString in CATCH IOEXCPETION");
+//                Log.d(TAG, "convertStreamToString in CATCH IOEXCPETION");
                 e.printStackTrace();
             }
 //            } finally {

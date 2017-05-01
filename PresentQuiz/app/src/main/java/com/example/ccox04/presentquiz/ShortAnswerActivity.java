@@ -39,12 +39,7 @@ public class ShortAnswerActivity extends AppCompatActivity {
 
     public void onClickSubmit(View view){
         userAnswer = answerEditText.getText().toString();
-        if(Objects.equals(userAnswer, correctAnswer)){
-            showShrtToast("Submitted: You Answered Correctly! :)");
-        }
-        else{
-            showShrtToast("Submitted: You answer has to be checked by the professor.");
-        }
+
         Intent goToMainActivity = new Intent();
         goToMainActivity.putExtra("SAQuestionCompleted", userAnswer);
         setResult(RESULT_OK, goToMainActivity);
