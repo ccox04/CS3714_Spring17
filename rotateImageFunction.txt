@@ -1,0 +1,30 @@
+private void setPic() {
+        // Get the dimensions of the View
+        int targetW = layoutWidth;
+        int targetH = layoutHeight;
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        // This is to get the image and then rotate the image while still keeping its full size
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(IMAGE_ROTATION);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,layoutWidth,layoutHeight,true);
+        rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+        pictureDrawable = new BitmapDrawable(getResources(), rotatedBitmap);
+        myCanvas.setBackground(pictureDrawable);
+    }
