@@ -61,7 +61,7 @@ void PresentThread::run()
 
 void PresentThread::readyRead()
 {
-//    QByteArray Data = socket->readAll();
+    QByteArray Data = socket->readAll();
     qDebug() << "readyRead" << endl;
     QString filename = QDate::currentDate().toString("'Quiz_'yyyy_MM_dd'.txt'");
     QFile file(filename);
@@ -69,11 +69,14 @@ void PresentThread::readyRead()
     if(!file.isOpen()){
         qDebug() << "Not opened" << endl;
     }
+//    QString socketIn = QString::fromLocal8Bit(Data);
+    qDebug() << "Data Before: " << Data << endl;
+    Data.replace("|", "\n");
+    qDebug() << "Data After: " << Data << endl;
     QTextStream outStream(&file);
-    outStream << socket->readAll() << endl;
+    outStream << Data << endl;
     qDebug() << "outStreaming Data " << endl;
     emit updateQuizRecvCounterSignal(1);
-    socket->waitForBytesWritten();
     socket->flush();
 //    socket->disconnectFromHost();
 //    if(socket->state() == QAbstractSocket::UnconnectedState || socket->waitForDisconnected()){

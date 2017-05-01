@@ -91,8 +91,6 @@ void PresentServer::incomingConnection(qintptr socketDescriptor)
 // This is to update the received quiz counter on the professors GUI
 void PresentServer::updateQuizRecvCounterSlot(int count_in){
     quizCounterRecv = quizCounterRecv + count_in;
-    quizCounterSent = quizCounterSent - 1;
-    emit updateQuizSentCounterSignal(quizCounterSent);
     emit updateQuizRecvCounterSignal(quizCounterRecv);
 }
 
