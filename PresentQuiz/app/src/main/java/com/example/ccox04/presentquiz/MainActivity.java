@@ -2,18 +2,32 @@ package com.example.ccox04.presentquiz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,12 +35,15 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnFocusChangeListener {
@@ -37,12 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
     ClientOutAsyncTask clientOutAsyncTask;
     EditText userIDEditText;
     Button scanImageBtn;
-    String ipAddressString;
+    String ipAddressString="";
     int portInt;
     QuizInfo quizInfo;
     JSONObject jsonReader;
     Intent getMultipleChoiceActivityIntent;
     Intent getShortAnswerActivityIntent;
+    private boolean canCLick = false;
     final int intentResult = 1;
 
     public static final String ENDMESSAGECHAR = "###";
@@ -85,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
     Bundle quizBundle;
 
     int number_questions, questionCounter;
+    String CurrentPhotoPath;
+    public static final int REQUEST_IMAGE = 4;
+    Uri uri;
+    BarcodeDetector detect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         getShortAnswerActivityIntent = new Intent(this, ShortAnswerActivity.class);
         quizBundle = new Bundle();
         quizInfo = new QuizInfo();
+        detect = new BarcodeDetector.Builder(getApplicationContext())
+                .setBarcodeFormats(Barcode.DATA_MATRIX|Barcode.QR_CODE)
+                .build();
         clientInAsyncTask = new ClientInAsyncTask();
         clientOutAsyncTask = new ClientOutAsyncTask();
     }
@@ -167,48 +192,130 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         outState.putString(USERIDSTRING, quizInfo.getUserID());
         super.onSaveInstanceState(outState);
     }
-
+    Bitmap bitmap;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG,"MainActivity : Entered onActivityResult");
-        questionCounter++;
-        if(data.hasExtra("MCQuestionCompleted")){
-            Log.d(TAG,"MainActivity onActivityResult hasExtra MCQuestionCompleted");
-            Log.d(TAG,"MainActivity onActivityResult hasExtra MCQuestionCompleted = " + data.getStringExtra("MCQuestionCompleted"));
-            quizInfo.setUserAnswerMC(data.getStringExtra("MCQuestionCompleted"));
-            checkNumberQuestions();
-        }
-        else if(data.hasExtra("SAQuestionCompleted")){
-            Log.d(TAG,"MainActivity onActivityResult hasExtra SAQuestionCompleted");
-            Log.d(TAG,"MainActivity onActivityResult hasExtra SAQuestionCompleted = " + data.getStringExtra("SAQuestionCompleted"));
-            quizInfo.setUserAnswerSA(data.getStringExtra("SAQuestionCompleted"));
-            checkNumberQuestions();
-        }
-        if(questionCounter == number_questions){
-            Log.d(TAG,"MainActivity onActivityResult questionCounter == number_questions");
-            scanImageBtn.setEnabled(false);
+        if(requestCode == this.REQUEST_IMAGE && resultCode == RESULT_OK)//The result is for the scanning image
+        {
 
-            if(clientInAsyncTask != null && clientInAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
-                clientInAsyncTask.cancel(true);
-                clientInAsyncTask = null;
+
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(uri);
+            this.sendBroadcast(mediaScanIntent);
+            int targetW = Resources.getSystem().getDisplayMetrics().widthPixels;
+            int targetH = Resources.getSystem().getDisplayMetrics().heightPixels;
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(CurrentPhotoPath, bmOptions);
+            int photoW = bmOptions.outWidth;
+            int photoH= bmOptions.outHeight;
+            int scale = Math.min(photoW/targetW, photoH/targetH);
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scale;
+            bmOptions.inPurgeable = true;
+            bitmap = BitmapFactory.decodeFile(CurrentPhotoPath, bmOptions);//code is in a bitmap
+
+        //bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                   // R.drawable.sample);
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(270);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,600,600,true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            Frame frame = new Frame.Builder().setBitmap(rotatedBitmap).build();
+
+            //Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<Barcode> bars = detect.detect(frame);
+
+           if (!detect.isOperational() || bars.size() == 0) {
+               Toast.makeText(this, "Retake image. No code found",Toast.LENGTH_SHORT).show();
             }
-            if(clientOutAsyncTask.getStatus() != AsyncTask.Status.RUNNING){
-                //Log.d(TAG,"MainActivity : in If case 0");
-                clientOutAsyncTask = new ClientOutAsyncTask();
-                clientOutAsyncTask.execute();
-            }
-            // Killing async task and starting a new one if one was running
-            else{
-                //Log.d(TAG,"MainActivity : in Else case 0");
-                //Thread.interrupted();
-                clientOutAsyncTask.cancel(true);
-                clientOutAsyncTask = null;
-                clientOutAsyncTask = new ClientOutAsyncTask();
-                clientOutAsyncTask.execute();
-            }
+            else {
+               //Toast.makeText(this, bars.size() + "", Toast.LENGTH_LONG).show();
+
+               Barcode server = bars.valueAt(0);
+               String str = server.displayValue;
+               Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+               String[] s = str.split("|");//Not working correctly, but it will do
+               Toast.makeText(this, userIDEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+               Log.d(TAG, str +" "+ s.length);
+               String processedString = "";
+
+               boolean starter = false;
+               boolean porter = false;
+               for(int i = 0; i < s.length;i++)
+               {
+                   if(!starter)
+                   {
+                       if(s[i].compareTo(".") == 0)
+                       {
+                           starter = true;
+                       }
+                   }
+                   else
+                   {
+                       if(s[i].compareTo("|") == 0)
+                       {
+                            porter = true;
+                       }
+                       else if(!porter)
+                       {
+                           ipAddressString = ipAddressString + s[i];
+                       }
+                       else
+                       {
+                           processedString = processedString + s[i];
+                       }
+                   }
+               }
+               portInt = Integer.parseInt(processedString);
+               Toast.makeText(this, ipAddressString + "  port: " + portInt, Toast.LENGTH_SHORT).show();
+               Log.d(TAG, ipAddressString+ " port: "+portInt);
+               onConnect();
+
+           }
+
         }
-        Log.d(TAG,"MainActivity : Leaving onActivityResult");
+        else if(resultCode != 0){//May edit out
+            Log.d(TAG, "MainActivity : Entered onActivityResult");
+            questionCounter++;
+            if (data.hasExtra("MCQuestionCompleted")) {
+                Log.d(TAG, "MainActivity onActivityResult hasExtra MCQuestionCompleted");
+                Log.d(TAG, "MainActivity onActivityResult hasExtra MCQuestionCompleted = " + data.getStringExtra("MCQuestionCompleted"));
+                quizInfo.setUserAnswerMC(data.getStringExtra("MCQuestionCompleted"));
+                checkNumberQuestions();
+            } else if (data.hasExtra("SAQuestionCompleted")) {
+                Log.d(TAG, "MainActivity onActivityResult hasExtra SAQuestionCompleted");
+                Log.d(TAG, "MainActivity onActivityResult hasExtra SAQuestionCompleted = " + data.getStringExtra("SAQuestionCompleted"));
+                quizInfo.setUserAnswerSA(data.getStringExtra("SAQuestionCompleted"));
+                checkNumberQuestions();
+            }
+            if (questionCounter == number_questions) {
+                Log.d(TAG, "MainActivity onActivityResult questionCounter == number_questions");
+                scanImageBtn.setEnabled(false);
+
+                if (clientInAsyncTask != null && clientInAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    clientInAsyncTask.cancel(true);
+                    clientInAsyncTask = null;
+                }
+                if (clientOutAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+                    //Log.d(TAG,"MainActivity : in If case 0");
+                    clientOutAsyncTask = new ClientOutAsyncTask();
+                    clientOutAsyncTask.execute();
+                }
+                // Killing async task and starting a new one if one was running
+                else {
+                    //Log.d(TAG,"MainActivity : in Else case 0");
+                    //Thread.interrupted();
+                    clientOutAsyncTask.cancel(true);
+                    clientOutAsyncTask = null;
+                    clientOutAsyncTask = new ClientOutAsyncTask();
+                    clientOutAsyncTask.execute();
+                }
+            }
+            Log.d(TAG, "MainActivity : Leaving onActivityResult");
+        }
     }
 
     private void checkNumberQuestions(){
@@ -244,7 +351,13 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
                 startActivityForResult(getShortAnswerIntent, intentResult);
             }
         }
+        else
+        {
+            Intent results = new Intent(this, Results.class);
+            results.putExtra(this.NUMBERQUESTIONS,number_questions);
+        }
         Log.d(TAG,"MainActivity : Leaving checkNumberQuestions");
+
     }
 
     @Override
@@ -260,9 +373,10 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         super.onDestroy();
     }
 
-    public void onClickConnect(View view){
-        ipAddressString = ipEditText.getText().toString(); // Set this to correct IP Address from QR code
-        portInt = Integer.parseInt(portEditText.getText().toString());  // Set this to correct IP PORT from QR code
+
+    public void onConnect(){
+       // ipAddressString = ipEditText.getText().toString(); // Set this to correct IP Address from QR code
+       // portInt = Integer.parseInt(portEditText.getText().toString());  // Set this to correct IP PORT from QR code
         if (clientInAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
             //Log.d(TAG,"MainActivity : in If case 0");
             clientInAsyncTask = new ClientInAsyncTask();
@@ -280,10 +394,60 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
 //        quizTextView.setText(ms);
     }
 
+    public void onScan(View view)
+    {
+        if(view.getId() == this.scanImageBtn.getId() && canCLick &&(this.userIDEditText.getText().toString().length() != 0))
+        {
+            takepic();
+        }
+    }
+    private void takepic()
+    {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.file",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                uri = photoURI;
+                //////////////////////////Need to add in stuff for taking the QR code and processing data once it is understood
+                //////////////////////////How data is put into qr code
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE);
+            }
+        }
+    }
+
+    private File createFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        CurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(Objects.equals(v.getId(), userIDEditText.getId())){
             scanImageBtn.setClickable(true);
+            canCLick = true;
         }
     }
 

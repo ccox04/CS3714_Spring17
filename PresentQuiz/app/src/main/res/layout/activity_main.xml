@@ -42,7 +42,9 @@
             android:background="@color/colorAccent"
             android:id="@+id/scanImageButtonMain"
             android:textColor="@android:color/white"
-            android:text="Scan Image"/>
+            android:text="Scan Image"
+            android:clickable="false"
+            android:onClick="onScan"/>
 
     </LinearLayout>
 

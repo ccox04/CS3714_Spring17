@@ -23,18 +23,12 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         fluff = (TextView)findViewById(R.id.fluff);
         end = (Button)findViewById(R.id.restart);
         image = (ImageView)findViewById(R.id.pic);
-        if(QRScreen.branch == 1)//multiple choice
-        {
-            fluff.setText("Your Score was:");
-            String s = intent.getStringExtra(MultipleChoice.SCORE);
-            score.setText(s+"%");
-            setImage(s);
-        }
-        else//short answer
-        {
-            image.setVisibility(View.INVISIBLE);
-            fluff.setText("Your answer was sent for grading");
-        }
+
+            //fluff.setText("Your Score was:");
+            //String s = intent.getStringExtra(MultipleChoice.SCORE);
+            //score.setText(s+"%");
+            //setImage(s);
+
         end.setOnClickListener(this);
     }
 
