@@ -8,11 +8,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Results extends AppCompatActivity implements View.OnClickListener {
+public class Results extends AppCompatActivity {
 
     TextView score;
     TextView fluff;
-    Button end;
     ImageView image;
     int userScore, totalNumberQuestions;
 
@@ -23,9 +22,9 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         Intent intent = this.getIntent();
         score = (TextView)findViewById(R.id.score);
         fluff = (TextView)findViewById(R.id.fluff);
-        end = (Button)findViewById(R.id.restart);
+
         image = (ImageView)findViewById(R.id.pic);
-/*        questionNum = intent.getStringExtra(MainActivity.NUMBERQUESTIONS);
+/*      questionNum = intent.getStringExtra(MainActivity.NUMBERQUESTIONS);
         correct = intent.getStringExtra(MainActivity.CORRECT);
         int questions = Integer.parseInt(questionNum);
         if(questions > 0)
@@ -45,8 +44,8 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
             totalNumberQuestions = Integer.parseInt(getMainBundle.getString(MainActivity.NUMBERQUESTIONS));
             userScore = Integer.parseInt(getMainBundle.getString(MainActivity.USERTOTALCORRECTANSWERS));
         }
-        userScore = (userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
-
+        float abc = ((float)userScore / totalNumberQuestions) * 100; // Multiply by 100 to get score equiv
+        userScore = Math.round(abc);
         fluff.setText("Your Score was:");
         //fluff.setText("Your Score was:");
         //String s = intent.getStringExtra(MultipleChoice.SCORE);
@@ -55,7 +54,6 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
 
         setImage();
 
-        end.setOnClickListener(this);
     }
 
 
@@ -78,16 +76,7 @@ public class Results extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        // I think we just want to keep them on the results screen instead of taking them back to start the quiz again
-//        if(view.getId() == end.getId())
-//        {
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);//Go back to connect screen
-//        }
-    }
-    //Add in save and restore instance states
+
 
 
     @Override
