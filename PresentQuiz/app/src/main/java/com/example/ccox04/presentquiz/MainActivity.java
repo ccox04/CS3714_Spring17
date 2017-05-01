@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
         if(requestCode == this.REQUEST_IMAGE && resultCode == RESULT_OK)//The result is for the scanning image
         {
 
-
+/*
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             mediaScanIntent.setData(uri);
             this.sendBroadcast(mediaScanIntent);
@@ -223,17 +223,17 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
             bmOptions.inSampleSize = scale;
             bmOptions.inPurgeable = true;
             bitmap = BitmapFactory.decodeFile(CurrentPhotoPath, bmOptions);//code is in a bitmap
-
-        //bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                   // R.drawable.sample);
-
+*/
+            bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                    R.drawable.sample);
+/*
             Matrix matrix = new Matrix();
             matrix.postRotate(270);
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,600,600,true);
             Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
             Frame frame = new Frame.Builder().setBitmap(rotatedBitmap).build();
-
-            //Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+*/
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
             SparseArray<Barcode> bars = detect.detect(frame);
 
            if (!detect.isOperational() || bars.size() == 0) {
