@@ -76,7 +76,6 @@ void PresentThread::readyRead()
     QTextStream outStream(&file);
     outStream << Data << endl;
     qDebug() << "outStreaming Data " << endl;
-    emit updateQuizRecvCounterSignal(1);
     socket->flush();
 //    socket->disconnectFromHost();
 //    if(socket->state() == QAbstractSocket::UnconnectedState || socket->waitForDisconnected()){
@@ -102,7 +101,6 @@ void PresentThread::sendQuizSlot(){
         socket->write(block);
 //        socket->waitForBytesWritten();
 //        socket->flush();
-        emit updateQuizSentCounterSignal(1);
 //        socket->disconnectFromHost();
     }
 }

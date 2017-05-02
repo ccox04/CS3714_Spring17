@@ -14,15 +14,8 @@ public:
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 
-signals:
-    void updateQuizRecvCounterSignal(int count_out);
-    void updateQuizSentCounterSignal(int count_out);
-//    void sendQuizSignal();
-
 public slots:
     void addQuestionSlot(int correctAnswer_in, int type_in, QString question_in, QString answerA_in, QString answerB_in, QString answerC_in, QString answerD_in, QString answerE_in, QString answerSA_in);
-    void updateQuizRecvCounterSlot(int count_in);
-    void updateQuizSentCounterSlot(int count_in);
 private:
     QStringList answerA_List, answerB_List, answerC_List, answerD_List, answerE_List, question_List, answerSA_List;
     QList<int> correctAnswerMC_List, type_List;

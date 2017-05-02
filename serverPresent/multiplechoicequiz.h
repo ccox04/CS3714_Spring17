@@ -3,8 +3,6 @@
 
 #include <QDialog>
 #include <QMessageBox>
-//#include "presentcontainer.h"
-//#include "mainwindow.h"
 
 namespace Ui {
 class MultipleChoiceQuiz;
@@ -26,8 +24,6 @@ signals:
 
 private:
     Ui::MultipleChoiceQuiz *ui;
-//    MainWindow *mainWindow;
-//    PresentContainer *presentContainer;
     int QUESTIONTYPE_MC = 0;
 };
 

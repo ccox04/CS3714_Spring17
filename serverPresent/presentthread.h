@@ -19,13 +19,10 @@ public:
 
 signals:
     void error(QTcpSocket::SocketError socketError);
-    void updateQuizRecvCounterSignal(int count_out);
-    void updateQuizSentCounterSignal(int count_out);
 
 public slots:
     void readyRead();
     void disconnected();
-//    void sendQuizSlot();
 
 private:
     QTcpSocket *socket;

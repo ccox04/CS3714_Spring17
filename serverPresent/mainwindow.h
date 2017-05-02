@@ -20,8 +20,6 @@ public:
 
 public slots:
     void addQuestionSlotMW(int correctAnswer, int type, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA);
-    void updateQuizRecvCounterSlot(int count_in);
-    void updateQuizSentCounterSlot(int count_in);
 
 private slots:
     void on_okPushButton_clicked();

@@ -83,20 +83,5 @@ void PresentServer::incomingConnection(qintptr socketDescriptor)
     PresentThread *thread = new PresentThread(socketDescriptor, containerJsonString, this);
 
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    connect(thread,SIGNAL(updateQuizRecvCounterSignal(int)), this, SLOT(updateQuizRecvCounterSlot(int)));
-    connect(thread, SIGNAL(updateQuizSentCounterSignal(int)), this, SLOT(updateQuizSentCounterSlot(int)));
     thread->start();
 }
-
-// This is to update the received quiz counter on the professors GUI
-void PresentServer::updateQuizRecvCounterSlot(int count_in){
-    quizCounterRecv = quizCounterRecv + count_in;
-    emit updateQuizRecvCounterSignal(quizCounterRecv);
-}
-
-// This is to update the sent quiz counter on the professors GUI
-void PresentServer::updateQuizSentCounterSlot(int count_in){
-    quizCounterSent = quizCounterSent + count_in;
-    emit updateQuizSentCounterSignal(quizCounterSent);
-}
-

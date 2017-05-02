@@ -16,8 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(shortAnswerUI, SIGNAL(addQuestionSignalSA(int,int,QString,QString,QString,QString,QString,QString,QString)), this, SLOT(addQuestionSlotMW(int, int, QString, QString, QString, QString, QString, QString, QString)));
     connect(this, SIGNAL(startServerSignal()), presentContainer, SLOT(startServerSlotPC()));
     connect(this, SIGNAL(addQuestionSignal(int,int,QString,QString,QString,QString,QString,QString,QString)), presentContainer, SLOT(addQuestionSlotPC(int,int,QString,QString,QString,QString,QString,QString,QString)));
-    connect(presentContainer, SIGNAL(updateQuizRecvCounterSignal(int)), this, SLOT(updateQuizRecvCounterSlot(int)));
-    connect(presentContainer, SIGNAL(updateQuizSentCounterSignal(int)), this, SLOT(updateQuizSentCounterSlot(int)));
 }
 
 MainWindow::~MainWindow()
@@ -44,14 +42,4 @@ void MainWindow::on_startServerPushButton_clicked()
 }
 void MainWindow::addQuestionSlotMW(int correctAnswer, int type, QString question, QString answerA, QString answerB, QString answerC, QString answerD, QString answerE, QString answerSA){
     emit addQuestionSignal(correctAnswer, type, question, answerA, answerB, answerC, answerD, answerE, answerSA);
-}
-
-// This is to update the received quiz counter on the professors GUI
-void MainWindow::updateQuizRecvCounterSlot(int count_in){
-    ui->quizReceivedLcdNumber->display(QString::number(count_in));
-}
-
-// This is to update the sent quiz counter on the professors GUI
-void MainWindow::updateQuizSentCounterSlot(int count_in){
-    ui->quizSentLcdNumber->display(QString::number(count_in));
 }
