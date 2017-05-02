@@ -3,9 +3,23 @@ package com.example.ccox04.presentquiz;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * Created by StepDadddy on 4/29/2017.
- */
+/*
+* Author:      Chris Cox
+* Class:       CS 3714
+* Due Date:    5/2/17
+* Assignment:  Final Group Project
+* Description: Create/ Design/ Build your own application from ground up that will better the blacksburg community.
+*              We designed an application to replace an iClicker. This applciation connect to a QT run server
+*              that would be run on the professors machine.  This server communicates with the application using
+*              TCP protocol.  The application handles the connection using AsyncTasks.  One AsyncTask receives the quiz
+*              and one AsyncTask sends the quiz back out to the server.  Additionally this project allows connection to the
+*              server by decrypting a image to retrieve the server's IP Address and Port.  Then the quiz is administered
+*              and the student can answer multiple choice or short answer questions.  Once the student is finished with
+*              the quiz then it is sent back to the server where it is stored in a local file on the professors machine
+*              with student identifier(PID), questions, answers given, student answers, and the correct answer to each question.
+* File: QuizInfo.java
+*
+*/
 
 public class QuizInfo {
     String serverIP, userID, question_mc, question_sa, answerA, answerB, answerC, answerD, answerE, answerSA, userAnswerMC, userAnswerSA;

@@ -14,19 +14,32 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
+/*
+* Author:      Chris Cox
+* Contributor: Charles Ritchie
+* Class:       CS 3714
+* Due Date:    5/2/17
+* Assignment:  Final Group Project
+* Description: Create/ Design/ Build your own application from ground up that will better the blacksburg community.
+*              We designed an application to replace an iClicker. This applciation connect to a QT run server
+*              that would be run on the professors machine.  This server communicates with the application using
+*              TCP protocol.  The application handles the connection using AsyncTasks.  One AsyncTask receives the quiz
+*              and one AsyncTask sends the quiz back out to the server.  Additionally this project allows connection to the
+*              server by decrypting a image to retrieve the server's IP Address and Port.  Then the quiz is administered
+*              and the student can answer multiple choice or short answer questions.  Once the student is finished with
+*              the quiz then it is sent back to the server where it is stored in a local file on the professors machine
+*              with student identifier(PID), questions, answers given, student answers, and the correct answer to each question.
+* File: MultipleChoiceActivity.java
+*
+*/
+
 public class MultipleChoiceActivity extends AppCompatActivity {
     Button answerABtn, answerBBtn, answerCBtn, answerDBtn, answerEBtn;
     TextView questionTextView;
-
     String answerA, answerB, answerC, answerD, answerE, currentQuestion;
-
     int correctAnswer;
     private int chosen;
-    private Toast toast;
-    private LayoutInflater lay;
-    View toastview;
     String accent = "#616BCF";
-    String primary = "#ddcf4d";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +53,9 @@ public class MultipleChoiceActivity extends AppCompatActivity {
         correctAnswer = 0;
         Integer.decode(accent);
         questionTextView = (TextView) findViewById(R.id.question_mcTextView);
-
         Intent getMainIntent = getIntent();
         Bundle getMainBundle = getMainIntent.getExtras();
-        toast = new Toast(this);
-        //Log.d(TAG, "PlayingActivity onCreate: BEFORE IF Background Song.");
         if (getMainIntent.hasExtra(MainActivity.QUESTION_MC)) {
-            //Log.d(TAG, "PlayingActivity onCreate: Printing Background Song.");
             questionTextView.setText(getMainBundle.getString(MainActivity.QUESTION_MC));
             currentQuestion = getMainBundle.getString(MainActivity.QUESTION_MC);
             answerA = getMainBundle.getString(MainActivity.ANSWERA);
@@ -61,11 +70,6 @@ public class MultipleChoiceActivity extends AppCompatActivity {
             answerEBtn.setText(answerE);
             chosen = 0;
             correctAnswer = getMainBundle.getInt(MainActivity.CORRECTANSWER_MC);
-
-
-
-
-
         }
     }
 

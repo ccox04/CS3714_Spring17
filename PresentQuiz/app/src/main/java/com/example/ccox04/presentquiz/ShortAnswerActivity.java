@@ -11,6 +11,24 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
+/*
+* Author:      Chris Cox
+* Class:       CS 3714
+* Due Date:    5/2/17
+* Assignment:  Final Group Project
+* Description: Create/ Design/ Build your own application from ground up that will better the blacksburg community.
+*              We designed an application to replace an iClicker. This applciation connect to a QT run server
+*              that would be run on the professors machine.  This server communicates with the application using
+*              TCP protocol.  The application handles the connection using AsyncTasks.  One AsyncTask receives the quiz
+*              and one AsyncTask sends the quiz back out to the server.  Additionally this project allows connection to the
+*              server by decrypting a image to retrieve the server's IP Address and Port.  Then the quiz is administered
+*              and the student can answer multiple choice or short answer questions.  Once the student is finished with
+*              the quiz then it is sent back to the server where it is stored in a local file on the professors machine
+*              with student identifier(PID), questions, answers given, student answers, and the correct answer to each question.
+* File: ShortAnswerActivity.java
+*
+*/
+
 public class ShortAnswerActivity extends AppCompatActivity {
 
     Button submitBtn;
@@ -28,9 +46,7 @@ public class ShortAnswerActivity extends AppCompatActivity {
 
         Intent getMainIntent = getIntent();
         Bundle getMainBundle = getMainIntent.getExtras();
-        //Log.d(TAG, "PlayingActivity onCreate: BEFORE IF Background Song.");
         if (getMainIntent.hasExtra(MainActivity.QUESTION_SA)) {
-            //Log.d(TAG, "PlayingActivity onCreate: Printing Background Song.");
             questionTextView.setText(getMainBundle.getString(MainActivity.QUESTION_SA));
             currentQuestion = getMainBundle.getString(MainActivity.QUESTION_SA);
             correctAnswer = getMainBundle.getString(MainActivity.ANSWER_SA);

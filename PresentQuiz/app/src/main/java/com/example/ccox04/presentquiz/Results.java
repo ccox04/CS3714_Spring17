@@ -8,6 +8,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/*
+* Author:      Charles Ritchie
+* Contributor: Chris Cox
+* Class:       CS 3714
+* Due Date:    5/2/17
+* Assignment:  Final Group Project
+* Description: Create/ Design/ Build your own application from ground up that will better the blacksburg community.
+*              We designed an application to replace an iClicker. This applciation connect to a QT run server
+*              that would be run on the professors machine.  This server communicates with the application using
+*              TCP protocol.  The application handles the connection using AsyncTasks.  One AsyncTask receives the quiz
+*              and one AsyncTask sends the quiz back out to the server.  Additionally this project allows connection to the
+*              server by decrypting a image to retrieve the server's IP Address and Port.  Then the quiz is administered
+*              and the student can answer multiple choice or short answer questions.  Once the student is finished with
+*              the quiz then it is sent back to the server where it is stored in a local file on the professors machine
+*              with student identifier(PID), questions, answers given, student answers, and the correct answer to each question.
+* File: Results.java
+*
+*/
+
 public class Results extends AppCompatActivity {
 
     TextView score;
@@ -19,25 +38,10 @@ public class Results extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        Intent intent = this.getIntent();
         score = (TextView)findViewById(R.id.score);
         fluff = (TextView)findViewById(R.id.fluff);
 
         image = (ImageView)findViewById(R.id.pic);
-/*      questionNum = intent.getStringExtra(MainActivity.NUMBERQUESTIONS);
-        correct = intent.getStringExtra(MainActivity.CORRECT);
-        int questions = Integer.parseInt(questionNum);
-        if(questions > 0)
-        {
-            int percent = Math.round(100*(Float.parseFloat(correct)/questions));
-            setImage(percent);
-            fluff.setText("Multiple choice score of:");
-            score.setText(percent+"%");
-        }
-        else
-        {
-            fluff.setText("Questions will be graded by the examiner");
-            */
         Intent getMainIntent = getIntent();
         Bundle getMainBundle = getMainIntent.getExtras();
         if (getMainIntent.hasExtra(MainActivity.NUMBERQUESTIONS)) {
@@ -54,13 +58,7 @@ public class Results extends AppCompatActivity {
         {
             fluff.setText("Instructor will grade questiosn");
         }
-        //fluff.setText("Your Score was:");
-        //String s = intent.getStringExtra(MultipleChoice.SCORE);
-
-        //setImage(s);
-
         setImage();
-
     }
 
 
