@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
     presentContainer = new PresentContainer();
     multipleChoiceUI = new MultipleChoiceQuiz();
     shortAnswerUI = new ShortAnswerQuiz();
-
     connect(multipleChoiceUI, SIGNAL(addQuestionSignalMC(int, int, QString, QString, QString, QString, QString, QString, QString)), this, SLOT(addQuestionSlotMW(int, int, QString, QString, QString, QString, QString, QString, QString)));
     connect(shortAnswerUI, SIGNAL(addQuestionSignalSA(int,int,QString,QString,QString,QString,QString,QString,QString)), this, SLOT(addQuestionSlotMW(int, int, QString, QString, QString, QString, QString, QString, QString)));
     connect(this, SIGNAL(startServerSignal()), presentContainer, SLOT(startServerSlotPC()));

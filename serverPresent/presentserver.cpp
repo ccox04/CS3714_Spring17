@@ -17,9 +17,9 @@ PresentServer::PresentServer(QObject *parent)
     quizCounterRecv = 0;
     quizCounterSent = 0;
     number_of_questions = 0;
-    qDebug() << "INSIDE OF PRESENT SERVER CONSTRUCTOR" + QString(correctAnswer) + question + answerA + answerB + answerC + answerD + answerE + answerSA;
 }
 
+// This adds in each question that the professor adds through the GUI to the appropriate lists
 void PresentServer::addQuestionSlot(int correctAnswer_in, int type_in, QString question_in, QString answerA_in, QString answerB_in, QString answerC_in, QString answerD_in, QString answerE_in, QString answerSA_in){
     question = question_in;
     answerA = answerA_in;
@@ -30,7 +30,6 @@ void PresentServer::addQuestionSlot(int correctAnswer_in, int type_in, QString q
     answerSA = answerSA_in;
     correctAnswer = correctAnswer_in;
     type = type_in;
-
     answerA_List.append(answerA_in);
     answerB_List.append(answerB_in);
     answerC_List.append(answerC_in);
@@ -40,24 +39,17 @@ void PresentServer::addQuestionSlot(int correctAnswer_in, int type_in, QString q
     correctAnswerMC_List.append(correctAnswer_in);
     type_List.append(type_in);
     question_List.append(question_in);
-
     number_of_questions = number_of_questions + 1;
-    qDebug() << "INSIDE OF PRESENT SERVER addQuestionSlot: Number of questions: " << number_of_questions << endl;
-    qDebug() << "INSIDE OF PRESENT SERVER addQuestionSlot" + QString(correctAnswer) + type + question + answerA + answerB + answerC + answerD + answerE + answerSA;
 }
 
 void PresentServer::incomingConnection(qintptr socketDescriptor)
 {
-    qDebug() << "INSIDE OF PRESENT SERVER incomingConnection" + QString(correctAnswer) + type + question + answerA + answerB + answerC + answerD + answerE + answerSA;
     QJsonObject containerJsonObj;
     QJsonObject numberObj;
-
     numberObj["question_number"] = number_of_questions; // Number from GUI each time the professor adds a question
     containerJsonObj.insert("number",numberObj);
-    qDebug() << "INSIDE OF PRESENT SERVER incomingConnection: Number of questions: " << number_of_questions << endl;
     for(int i = 0; i < number_of_questions; i++){
         QJsonObject quizObj;
-        qDebug() << "INSIDE OF PRESENT SERVER incomingConnection: i: " << i << endl;
         if(type_List.at(i) == QUESTIONTYPE_MC){ // The question is multiple choice
         quizObj["question"] = question_List.at(i);
         quizObj["answerA"] = answerA_List.at(i);
@@ -76,12 +68,9 @@ void PresentServer::incomingConnection(qintptr socketDescriptor)
             containerJsonObj.insert(tempQuizNameSA, quizObj); // this will be "quiz_sa" + question_number
         }
     }
-
-
     QJsonDocument containerJsonDoc(containerJsonObj);
     QString containerJsonString = containerJsonDoc.toJson().append(ENDMESSAGECHAR); // Making json a string and adding end message characters
     PresentThread *thread = new PresentThread(socketDescriptor, containerJsonString, this);
-
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
 }

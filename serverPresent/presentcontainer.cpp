@@ -27,22 +27,23 @@ void PresentContainer::startServerSlotPC(){
         Msgbox.exec();
         return;
     }
-    QString ipAddress;
-    QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
-    // use the first non-localhost IPv4 address
-    for (int i = 0; i < ipAddressesList.size(); ++i) {
-        if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
-            ipAddressesList.at(i).toIPv4Address()) {
-            ipAddress = ipAddressesList.at(i).toString();
+    QString serverIPAddress;
+    QList<QHostAddress> serverIPAddressesList = QNetworkInterface::allAddresses();
+    // This checks to try and use a nonlocal IPv4 host
+    for (int i = 0; i < serverIPAddressesList.size(); ++i) {
+        if (serverIPAddressesList.at(i) != QHostAddress::LocalHost &&
+            serverIPAddressesList.at(i).toIPv4Address()) {
+            serverIPAddress = serverIPAddressesList.at(i).toString();
             break;
         }
     }
-    // if we did not find one, use IPv4 localhost
-    if (ipAddress.isEmpty()){
-        ipAddress = QHostAddress(QHostAddress::LocalHost).toString();
+    // If no nonlocal host was found use a local IPv4
+    if (serverIPAddress.isEmpty()){
+        serverIPAddress = QHostAddress(QHostAddress::LocalHost).toString();
     }
+    // This displays the server IP and Port in a message box to the screen
     QMessageBox Msgbox;
-    Msgbox.setText(tr("The server is running on\n\nIP: %1\nport: %2\n\n") .arg(ipAddress).arg(presentServer->serverPort()));
+    Msgbox.setText(tr("The server is running on\n\nIP: %1\nport: %2\n\n") .arg(serverIPAddress).arg(presentServer->serverPort()));
     Msgbox.exec();
 }
 

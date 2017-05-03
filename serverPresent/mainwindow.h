@@ -24,7 +24,6 @@ public slots:
 private slots:
     void on_okPushButton_clicked();
 
-
     void on_startServerPushButton_clicked();
 
 signals:
