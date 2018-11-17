@@ -62,8 +62,7 @@ public class Results extends AppCompatActivity {
     }
 
 
-    private void setImage()
-    {
+    private void setImage() {
         if(userScore == 100){
             image.setImageResource(R.drawable.amazing);
         }

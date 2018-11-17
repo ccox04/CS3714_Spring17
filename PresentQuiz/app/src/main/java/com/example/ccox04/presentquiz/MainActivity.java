@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnFocusChang
             SparseArray<Barcode> bars = detect.detect(frame);
             if (!detect.isOperational() || bars.size() == 0) {
                 Toast.makeText(this, "Retake image. No code found",Toast.LENGTH_SHORT).show();
+
             }
             else {
                 Barcode server = bars.valueAt(0);
